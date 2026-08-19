@@ -48,11 +48,9 @@ export function MissionStatusPanel() {
 
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-y-auto border-t border-[var(--border)] bg-[var(--bg-panel)] p-3">
-      <div className="flex items-center justify-between">
-        <p className="text-xs text-[var(--text-secondary)]">
-          경유 진행 {Math.max(0, active.nextWaypointIdx - 1)}/{mission.waypoints.length - 1}
-        </p>
-        <div className="flex items-center gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <RouteStrip waypoints={mission.waypoints} nextWaypointIdx={active.nextWaypointIdx} />
+        <div className="flex shrink-0 items-center gap-3">
           <p className="font-digital text-base text-[var(--text-primary)]">{formatDuration(elapsedSec)}</p>
           <button
             type="button"
@@ -84,6 +82,30 @@ export function MissionStatusPanel() {
           onUnarmAlight={unarmAlight}
         />
       )}
+    </div>
+  )
+}
+
+/** 출발~도착 전체 경로를 역 이름으로 보여주고, 이미 지난 곳/다음 목표/아직 안 간 곳을 색으로 구분한다. */
+function RouteStrip({ waypoints, nextWaypointIdx }: { waypoints: string[]; nextWaypointIdx: number }) {
+  return (
+    <div className="flex flex-1 flex-wrap items-center gap-x-1.5 gap-y-1 text-sm">
+      {waypoints.map((name, i) => {
+        const status = i < nextWaypointIdx ? 'done' : i === nextWaypointIdx ? 'next' : 'pending'
+        return (
+          <span key={i} className="flex items-center gap-1.5">
+            {i > 0 && <span className="text-[var(--text-secondary)]">→</span>}
+            <span
+              className={i === 0 || i === waypoints.length - 1 ? 'font-bold' : 'font-medium'}
+              style={{
+                color: status === 'next' ? '#ff9500' : status === 'done' ? '#2ea043' : 'var(--text-primary)',
+              }}
+            >
+              {name}
+            </span>
+          </span>
+        )
+      })}
     </div>
   )
 }
