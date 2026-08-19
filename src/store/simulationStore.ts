@@ -4,8 +4,8 @@ import type { Train } from '../simulation/train'
 import { initializeTrainsForTrack, tickTrack } from '../simulation/engine'
 import { mulberry32 } from '../utils/rng'
 
-/** 실제 지하철 1분 = 체감 1초. 즉 게임 시각은 실시간 대비 60배속으로 흐른다. */
-export const TIME_COMPRESSION_RATE = 60
+/** 게임 시각은 실시간 대비 20배속으로 흐른다(체감 1초 = 게임 20초). */
+export const TIME_COMPRESSION_RATE = 20
 
 /** 하루 운행 타임라인 (초 단위, 자정 기준). 첫차 05:30 ~ 다음날 01:00(=25:00)까지를 기본 범위로 둔다. */
 export const SERVICE_START_SECONDS = 5 * 3600 + 30 * 60
