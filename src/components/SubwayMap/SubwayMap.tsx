@@ -172,10 +172,11 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
             </g>
           ))}
 
-        {/* 미션 경유지 강조 링 */}
+        {/* 미션 경유지 강조 링 — 다음 목표는 크게 부풀며 깜빡이고, 나머지는 은은하게 깜빡인다 */}
         {waypointMarkers?.map((wp, i) => {
           const coord = getStationCoord(wp.name)
           if (!coord) return null
+          const isNext = wp.status === 'next'
           return (
             <g key={`${wp.name}-${i}`}>
               <circle
@@ -184,10 +185,19 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
                 r={12}
                 fill="none"
                 stroke={WAYPOINT_STATUS_COLOR[wp.status]}
-                strokeWidth={2}
+                strokeWidth={isNext ? 3.5 : 2}
                 strokeDasharray={wp.status === 'pending' ? '3 2' : undefined}
+                className={isNext ? 'waypoint-ring-next' : 'waypoint-ring-soft'}
               />
-              <circle cx={coord[0] + 9} cy={coord[1] - 9} r={6} fill={WAYPOINT_STATUS_COLOR[wp.status]} stroke="#0d1117" strokeWidth={1} />
+              <circle
+                cx={coord[0] + 9}
+                cy={coord[1] - 9}
+                r={isNext ? 7.5 : 6}
+                fill={WAYPOINT_STATUS_COLOR[wp.status]}
+                stroke="#0d1117"
+                strokeWidth={1}
+                className={isNext ? 'waypoint-badge-next' : undefined}
+              />
               <text x={coord[0] + 9} y={coord[1] - 6} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#ffffff">
                 {i + 1}
               </text>

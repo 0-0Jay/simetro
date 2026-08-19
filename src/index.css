@@ -43,3 +43,38 @@ body {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.05em;
 }
+
+/* 미션 경유지 마커: 지금 향해야 할 다음 목표는 크게 부풀며 깜빡이고, 나머지는 은은하게 깜빡인다. */
+@keyframes waypoint-pulse-next {
+  0%,
+  100% {
+    r: 12;
+    opacity: 1;
+  }
+  50% {
+    r: 18;
+    opacity: 0.3;
+  }
+}
+
+@keyframes waypoint-pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.waypoint-ring-next {
+  animation: waypoint-pulse-next 1.1s ease-in-out infinite;
+}
+
+.waypoint-ring-soft {
+  animation: waypoint-pulse-soft 1.8s ease-in-out infinite;
+}
+
+.waypoint-badge-next {
+  animation: waypoint-pulse-soft 1.1s ease-in-out infinite;
+}
