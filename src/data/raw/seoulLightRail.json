@@ -1,0 +1,348 @@
+[
+  {
+    "id": "line9",
+    "name": "9호선",
+    "color": "#BDB092",
+    "operator": "서울시메트로9호선/서울교통공사",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "24:44",
+    "mainStops": [
+      {
+        "stationName": "개화",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "김포공항",
+        "cumulativeKm": 3.6,
+        "travelTimeSec": 495
+      },
+      {
+        "stationName": "공항시장",
+        "cumulativeKm": 4.4,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "신방화",
+        "cumulativeKm": 5.2,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "마곡나루",
+        "cumulativeKm": 6.1,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "양천향교",
+        "cumulativeKm": 7.5,
+        "travelTimeSec": 192
+      },
+      {
+        "stationName": "가양",
+        "cumulativeKm": 8.8,
+        "travelTimeSec": 179
+      },
+      {
+        "stationName": "증미",
+        "cumulativeKm": 9.5,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "등촌",
+        "cumulativeKm": 10.5,
+        "travelTimeSec": 137
+      },
+      {
+        "stationName": "염창",
+        "cumulativeKm": 11.4,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "신목동",
+        "cumulativeKm": 12.3,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "선유도",
+        "cumulativeKm": 13.5,
+        "travelTimeSec": 165
+      },
+      {
+        "stationName": "당산",
+        "cumulativeKm": 14.5,
+        "travelTimeSec": 137
+      },
+      {
+        "stationName": "국회의사당",
+        "cumulativeKm": 16,
+        "travelTimeSec": 206
+      },
+      {
+        "stationName": "여의도",
+        "cumulativeKm": 16.9,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "샛강",
+        "cumulativeKm": 17.7,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "노량진",
+        "cumulativeKm": 18.9,
+        "travelTimeSec": 165
+      },
+      {
+        "stationName": "노들",
+        "cumulativeKm": 20,
+        "travelTimeSec": 151
+      },
+      {
+        "stationName": "흑석",
+        "cumulativeKm": 21.1,
+        "travelTimeSec": 151
+      },
+      {
+        "stationName": "동작",
+        "cumulativeKm": 22.5,
+        "travelTimeSec": 192
+      },
+      {
+        "stationName": "구반포",
+        "cumulativeKm": 23.5,
+        "travelTimeSec": 137
+      },
+      {
+        "stationName": "신반포",
+        "cumulativeKm": 24.2,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "고속터미널",
+        "cumulativeKm": 25,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "사평",
+        "cumulativeKm": 26.1,
+        "travelTimeSec": 151
+      },
+      {
+        "stationName": "신논현",
+        "cumulativeKm": 27,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "언주",
+        "cumulativeKm": 27.8,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "선정릉",
+        "cumulativeKm": 28.7,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "삼성중앙",
+        "cumulativeKm": 29.5,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "봉은사",
+        "cumulativeKm": 30.3,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "종합운동장",
+        "cumulativeKm": 31.7,
+        "travelTimeSec": 192
+      },
+      {
+        "stationName": "삼전",
+        "cumulativeKm": 33.1,
+        "travelTimeSec": 192
+      },
+      {
+        "stationName": "석촌고분",
+        "cumulativeKm": 33.9,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "석촌",
+        "cumulativeKm": 34.9,
+        "travelTimeSec": 137
+      },
+      {
+        "stationName": "송파나루",
+        "cumulativeKm": 35.7,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "한성백제",
+        "cumulativeKm": 36.5,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "올림픽공원",
+        "cumulativeKm": 37.9,
+        "travelTimeSec": 192
+      },
+      {
+        "stationName": "둔촌오륜",
+        "cumulativeKm": 38.9,
+        "travelTimeSec": 137
+      },
+      {
+        "stationName": "중앙보훈병원",
+        "cumulativeKm": 40.6,
+        "travelTimeSec": 234
+      }
+    ],
+    "notes": "나무위키 역 목록/거리표 기반. 개별 역간 소요시간은 공식 표정속도(26.2km/h)를 거리 비례로 배분한 근사치. 4단계 연장(고덕강일 방면)은 미확정이라 미포함."
+  },
+  {
+    "id": "ui",
+    "name": "우이신설선",
+    "color": "#B0CE18",
+    "operator": "우이신설경전철㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "25:00",
+    "mainStops": [
+      {
+        "stationName": "북한산우이",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "솔밭공원",
+        "cumulativeKm": 0.8,
+        "travelTimeSec": 85
+      },
+      {
+        "stationName": "4.19민주묘지",
+        "cumulativeKm": 1.5,
+        "travelTimeSec": 74
+      },
+      {
+        "stationName": "가오리",
+        "cumulativeKm": 2.4,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "화계",
+        "cumulativeKm": 3.3,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "삼양",
+        "cumulativeKm": 4,
+        "travelTimeSec": 74
+      },
+      {
+        "stationName": "삼양사거리",
+        "cumulativeKm": 4.8,
+        "travelTimeSec": 85
+      },
+      {
+        "stationName": "솔샘",
+        "cumulativeKm": 5.5,
+        "travelTimeSec": 74
+      },
+      {
+        "stationName": "북한산보국문",
+        "cumulativeKm": 6.8,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "정릉",
+        "cumulativeKm": 7.9,
+        "travelTimeSec": 117
+      },
+      {
+        "stationName": "성신여대입구",
+        "cumulativeKm": 9.1,
+        "travelTimeSec": 128
+      },
+      {
+        "stationName": "보문",
+        "cumulativeKm": 10,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "신설동",
+        "cumulativeKm": 11,
+        "travelTimeSec": 106
+      }
+    ],
+    "notes": "나무위키 역 목록/거리표 및 언론보도(편도 19분30초) 기반. 개별 역간 소요시간은 거리 비례 배분 근사치."
+  },
+  {
+    "id": "sinlim",
+    "name": "신림선",
+    "color": "#6789CA",
+    "operator": "남서울경전철㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "24:44",
+    "mainStops": [
+      {
+        "stationName": "샛강",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "대방",
+        "cumulativeKm": 0.5,
+        "travelTimeSec": 64
+      },
+      {
+        "stationName": "서울지방병무청",
+        "cumulativeKm": 1.4,
+        "travelTimeSec": 115
+      },
+      {
+        "stationName": "보라매",
+        "cumulativeKm": 2,
+        "travelTimeSec": 77
+      },
+      {
+        "stationName": "보라매공원",
+        "cumulativeKm": 2.6,
+        "travelTimeSec": 77
+      },
+      {
+        "stationName": "보라매병원",
+        "cumulativeKm": 3.4,
+        "travelTimeSec": 102
+      },
+      {
+        "stationName": "당곡",
+        "cumulativeKm": 3.9,
+        "travelTimeSec": 64
+      },
+      {
+        "stationName": "신림",
+        "cumulativeKm": 4.6,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "서원",
+        "cumulativeKm": 5.3,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "서울대벤처타운",
+        "cumulativeKm": 6.4,
+        "travelTimeSec": 141
+      },
+      {
+        "stationName": "관악산",
+        "cumulativeKm": 7.5,
+        "travelTimeSec": 141
+      }
+    ],
+    "notes": "나무위키 역 목록/거리표 및 공식 소요시간(편도 16분) 기반. 개별 역간 소요시간은 거리 비례 배분 근사치."
+  }
+]

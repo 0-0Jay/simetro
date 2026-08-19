@@ -1,0 +1,208 @@
+import { useMemo, useRef, useState } from 'react'
+import { useSimulationStore } from '../../store/simulationStore'
+import { buildMapData } from './mapData'
+import { computeTrainScreenPositions } from './trainPositions'
+import { usePanZoom } from './usePanZoom'
+import { StationPopover } from './StationPopover'
+import { MAP_VIEWBOX, getStationCoord } from '../../data/coordinates'
+import { SUBWAY_LINES } from '../../data/lines'
+
+const LINE_COLOR_BY_ID = new Map(SUBWAY_LINES.map((l) => [l.id, l.color]))
+const LINE_INFO_BY_ID = new Map(SUBWAY_LINES.map((l) => [l.id, { name: l.name, color: l.color }]))
+
+/** 오른쪽(+x, 0도)을 기준으로 그린 화살표 모양. transform으로 위치/회전을 적용한다. */
+const TRAIN_ARROW_PATH = 'M 5.5 0 L -3.5 -3.6 L -1.6 0 L -3.5 3.6 Z'
+
+const WAYPOINT_STATUS_COLOR: Record<'done' | 'next' | 'pending', string> = {
+  done: '#2ea043',
+  next: '#ff9500',
+  pending: '#8b949e',
+}
+
+export interface SubwayMapRider {
+  mode: 'waiting' | 'riding'
+  station?: string
+  trainId?: string
+}
+
+interface SubwayMapProps {
+  rider?: SubwayMapRider | null
+  followRider?: boolean
+  waypointMarkers?: { name: string; status: 'done' | 'next' | 'pending' }[]
+}
+
+export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProps) {
+  const svgRef = useRef<SVGSVGElement>(null)
+  const tracks = useSimulationStore((s) => s.tracks)
+  const trainsByTrack = useSimulationStore((s) => s.trainsByTrack)
+  const [selectedStation, setSelectedStation] = useState<string | null>(null)
+
+  const { segments, stations } = useMemo(() => buildMapData(), [])
+  const trains = useMemo(() => computeTrainScreenPositions(tracks, trainsByTrack), [tracks, trainsByTrack])
+
+  const riderPoint = useMemo(() => {
+    if (!rider) return null
+    if (rider.mode === 'waiting' && rider.station) {
+      const c = getStationCoord(rider.station)
+      return c ? { x: c[0], y: c[1] } : null
+    }
+    if (rider.mode === 'riding' && rider.trainId) {
+      const t = trains.find((tr) => tr.id === rider.trainId)
+      return t ? { x: t.x, y: t.y } : null
+    }
+    return null
+  }, [rider, trains])
+
+  const { transform, handlers } = usePanZoom(
+    svgRef,
+    MAP_VIEWBOX,
+    { scale: 1, tx: 0, ty: 0 },
+    followRider ? riderPoint : null,
+  )
+
+  const selected = stations.find((st) => st.name === selectedStation)
+
+  return (
+    <svg
+      ref={svgRef}
+      viewBox={`${MAP_VIEWBOX.minX} ${MAP_VIEWBOX.minY} ${MAP_VIEWBOX.width} ${MAP_VIEWBOX.height}`}
+      preserveAspectRatio="xMidYMid slice"
+      className="h-full w-full touch-none select-none bg-[var(--bg)]"
+      onClick={() => setSelectedStation(null)}
+      {...handlers}
+    >
+      <g transform={`translate(${transform.tx} ${transform.ty}) scale(${transform.scale})`}>
+        {/* 노선 (그림자 언더레이 + 실제 색 라인) */}
+        {segments.map((seg) => (
+          <polyline
+            key={`${seg.key}-under`}
+            points={seg.points.map((p) => p.join(',')).join(' ')}
+            fill="none"
+            stroke="#000000"
+            strokeOpacity={0.35}
+            strokeWidth={7}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ))}
+        {segments.map((seg) => (
+          <polyline
+            key={seg.key}
+            points={seg.points.map((p) => p.join(',')).join(' ')}
+            fill="none"
+            stroke={seg.color}
+            strokeWidth={5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ))}
+
+        {/* 일반역: 작은 흰 테두리 원 + 역명 라벨 */}
+        {stations
+          .filter((st) => !st.isTransfer)
+          .map((st) => (
+            <g key={st.name} onClick={(e) => { e.stopPropagation(); setSelectedStation(st.name) }} style={{ cursor: 'pointer' }}>
+              <circle cx={st.x} cy={st.y} r={7} fill="transparent" />
+              <circle
+                cx={st.x}
+                cy={st.y}
+                r={3.2}
+                fill={LINE_COLOR_BY_ID.get(st.lineIds[0]) ?? '#ffffff'}
+                stroke="#0d1117"
+                strokeWidth={1}
+              />
+              <text
+                x={st.x}
+                y={st.y - 7}
+                textAnchor="middle"
+                fontSize={8.5}
+                fontWeight={400}
+                fill="#d7dde3"
+                stroke="#0d1117"
+                strokeWidth={2.2}
+                paintOrder="stroke"
+                style={{ fontFamily: 'system-ui, sans-serif' }}
+              >
+                {st.name}
+              </text>
+            </g>
+          ))}
+
+        {/* 환승역: 크게 강조 + 굵은 역명 라벨 */}
+        {stations
+          .filter((st) => st.isTransfer)
+          .map((st) => (
+            <g key={st.name} onClick={(e) => { e.stopPropagation(); setSelectedStation(st.name) }} style={{ cursor: 'pointer' }}>
+              <circle cx={st.x} cy={st.y} r={7} fill="#0d1117" stroke="#ffffff" strokeWidth={2.6} />
+              <text
+                x={st.x}
+                y={st.y - 11}
+                textAnchor="middle"
+                fontSize={12}
+                fontWeight={700}
+                fill="#ffffff"
+                stroke="#0d1117"
+                strokeWidth={3}
+                paintOrder="stroke"
+                style={{ fontFamily: 'system-ui, sans-serif' }}
+              >
+                {st.name}
+              </text>
+            </g>
+          ))}
+
+        {/* 미션 경유지 강조 링 */}
+        {waypointMarkers?.map((wp, i) => {
+          const coord = getStationCoord(wp.name)
+          if (!coord) return null
+          return (
+            <g key={`${wp.name}-${i}`}>
+              <circle
+                cx={coord[0]}
+                cy={coord[1]}
+                r={12}
+                fill="none"
+                stroke={WAYPOINT_STATUS_COLOR[wp.status]}
+                strokeWidth={2}
+                strokeDasharray={wp.status === 'pending' ? '3 2' : undefined}
+              />
+              <circle cx={coord[0] + 9} cy={coord[1] - 9} r={6} fill={WAYPOINT_STATUS_COLOR[wp.status]} stroke="#0d1117" strokeWidth={1} />
+              <text x={coord[0] + 9} y={coord[1] - 6} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#ffffff">
+                {i + 1}
+              </text>
+            </g>
+          )
+        })}
+
+        {/* 실시간 열차 위치 — 진행방향을 가리키는 화살표 */}
+        {trains.map((tr) => (
+          <path
+            key={tr.id}
+            d={TRAIN_ARROW_PATH}
+            transform={`translate(${tr.x} ${tr.y}) rotate(${tr.angle})`}
+            fill={tr.hasDelay ? '#ff3b30' : tr.color}
+            stroke="#ffffff"
+            strokeWidth={0.9}
+            strokeLinejoin="round"
+          />
+        ))}
+
+        {/* 미션 플레이어(탑승객) 위치 — 붉은 점 */}
+        {riderPoint && (
+          <circle cx={riderPoint.x} cy={riderPoint.y} r={7} fill="#ff3b30" stroke="#ffffff" strokeWidth={2} />
+        )}
+
+        {selected && (
+          <StationPopover
+            x={selected.x}
+            y={selected.y}
+            scale={transform.scale}
+            stationName={selected.name}
+            lines={selected.lineIds.map((id) => ({ id, ...(LINE_INFO_BY_ID.get(id) ?? { name: id, color: '#888' }) }))}
+            onClose={() => setSelectedStation(null)}
+          />
+        )}
+      </g>
+    </svg>
+  )
+}

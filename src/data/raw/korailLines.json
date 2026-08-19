@@ -1,0 +1,771 @@
+[
+  {
+    "id": "gyeonguijungang",
+    "name": "경의중앙선",
+    "color": "#77C4A3",
+    "operator": "한국철도공사(코레일)",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:00",
+    "lastTrain": "24:00",
+    "mainStops": [
+      {
+        "stationName": "문산",
+        "cumulativeKm": 9.7,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "파주",
+        "cumulativeKm": 14.1,
+        "travelTimeSec": 358
+      },
+      {
+        "stationName": "월롱",
+        "cumulativeKm": 16.3,
+        "travelTimeSec": 179
+      },
+      {
+        "stationName": "영태",
+        "cumulativeKm": 18.1,
+        "travelTimeSec": 146
+      },
+      {
+        "stationName": "금촌",
+        "cumulativeKm": 20.4,
+        "travelTimeSec": 187
+      },
+      {
+        "stationName": "금릉",
+        "cumulativeKm": 22.5,
+        "travelTimeSec": 171
+      },
+      {
+        "stationName": "운정",
+        "cumulativeKm": 25.6,
+        "travelTimeSec": 252
+      },
+      {
+        "stationName": "야당",
+        "cumulativeKm": 27.1,
+        "travelTimeSec": 122
+      },
+      {
+        "stationName": "탄현",
+        "cumulativeKm": 29.2,
+        "travelTimeSec": 171
+      },
+      {
+        "stationName": "일산",
+        "cumulativeKm": 30.9,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "풍산",
+        "cumulativeKm": 32.8,
+        "travelTimeSec": 155
+      },
+      {
+        "stationName": "백마",
+        "cumulativeKm": 34.5,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "곡산",
+        "cumulativeKm": 36.1,
+        "travelTimeSec": 130
+      },
+      {
+        "stationName": "대곡",
+        "cumulativeKm": 37.8,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "능곡",
+        "cumulativeKm": 39.6,
+        "travelTimeSec": 146
+      },
+      {
+        "stationName": "행신",
+        "cumulativeKm": 41.1,
+        "travelTimeSec": 122
+      },
+      {
+        "stationName": "강매",
+        "cumulativeKm": 42.1,
+        "travelTimeSec": 81
+      },
+      {
+        "stationName": "한국항공대",
+        "cumulativeKm": 44.5,
+        "travelTimeSec": 195
+      },
+      {
+        "stationName": "향동",
+        "cumulativeKm": 46.2,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "수색",
+        "cumulativeKm": 47.9,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "디지털미디어시티",
+        "cumulativeKm": 48.5,
+        "travelTimeSec": 49
+      },
+      {
+        "stationName": "가좌",
+        "cumulativeKm": 50.2,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "홍대입구",
+        "cumulativeKm": 51.9,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "서강대",
+        "cumulativeKm": 52.8,
+        "travelTimeSec": 73
+      },
+      {
+        "stationName": "공덕",
+        "cumulativeKm": 54.7,
+        "travelTimeSec": 155
+      },
+      {
+        "stationName": "효창공원앞",
+        "cumulativeKm": 55.7,
+        "travelTimeSec": 81
+      },
+      {
+        "stationName": "용산",
+        "cumulativeKm": 57.2,
+        "travelTimeSec": 122
+      },
+      {
+        "stationName": "이촌",
+        "cumulativeKm": 59.1,
+        "travelTimeSec": 155
+      },
+      {
+        "stationName": "서빙고",
+        "cumulativeKm": 60.8,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "한남",
+        "cumulativeKm": 62.7,
+        "travelTimeSec": 155
+      },
+      {
+        "stationName": "옥수",
+        "cumulativeKm": 64.3,
+        "travelTimeSec": 130
+      },
+      {
+        "stationName": "응봉",
+        "cumulativeKm": 66.1,
+        "travelTimeSec": 146
+      },
+      {
+        "stationName": "왕십리",
+        "cumulativeKm": 67.5,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "청량리",
+        "cumulativeKm": 69.9,
+        "travelTimeSec": 195
+      },
+      {
+        "stationName": "회기",
+        "cumulativeKm": 71.3,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "중랑",
+        "cumulativeKm": 73.1,
+        "travelTimeSec": 146
+      },
+      {
+        "stationName": "상봉",
+        "cumulativeKm": 73.9,
+        "travelTimeSec": 65
+      },
+      {
+        "stationName": "망우",
+        "cumulativeKm": 74.5,
+        "travelTimeSec": 49
+      },
+      {
+        "stationName": "양원",
+        "cumulativeKm": 76.2,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "구리",
+        "cumulativeKm": 79.4,
+        "travelTimeSec": 260
+      },
+      {
+        "stationName": "도농",
+        "cumulativeKm": 81.1,
+        "travelTimeSec": 138
+      },
+      {
+        "stationName": "양정",
+        "cumulativeKm": 84.8,
+        "travelTimeSec": 301
+      },
+      {
+        "stationName": "덕소",
+        "cumulativeKm": 87.1,
+        "travelTimeSec": 187
+      },
+      {
+        "stationName": "도심",
+        "cumulativeKm": 88.6,
+        "travelTimeSec": 122
+      },
+      {
+        "stationName": "팔당",
+        "cumulativeKm": 92.8,
+        "travelTimeSec": 342
+      },
+      {
+        "stationName": "운길산",
+        "cumulativeKm": 99.2,
+        "travelTimeSec": 520
+      },
+      {
+        "stationName": "양수",
+        "cumulativeKm": 101.1,
+        "travelTimeSec": 155
+      },
+      {
+        "stationName": "신원",
+        "cumulativeKm": 105.8,
+        "travelTimeSec": 382
+      },
+      {
+        "stationName": "국수",
+        "cumulativeKm": 108.7,
+        "travelTimeSec": 236
+      },
+      {
+        "stationName": "아신",
+        "cumulativeKm": 112.8,
+        "travelTimeSec": 333
+      },
+      {
+        "stationName": "오빈",
+        "cumulativeKm": 115.6,
+        "travelTimeSec": 228
+      },
+      {
+        "stationName": "양평(경기)",
+        "cumulativeKm": 117.8,
+        "travelTimeSec": 179
+      },
+      {
+        "stationName": "원덕",
+        "cumulativeKm": 123.6,
+        "travelTimeSec": 472
+      },
+      {
+        "stationName": "용문",
+        "cumulativeKm": 128.4,
+        "travelTimeSec": 390
+      },
+      {
+        "stationName": "지평",
+        "cumulativeKm": 132,
+        "travelTimeSec": 293
+      }
+    ],
+    "branches": [
+      {
+        "fromStationName": "문산",
+        "label": "임진강 셔틀",
+        "stops": [
+          {
+            "stationName": "운천",
+            "cumulativeKm": 3.7,
+            "travelTimeSec": 0
+          },
+          {
+            "stationName": "임진강",
+            "cumulativeKm": 6,
+            "travelTimeSec": 187
+          }
+        ]
+      }
+    ],
+    "notes": "나무위키/위키백과 기반 근사치. 문산~용문 완행 표정속도(44.27km/h)로 역간 소요시간을 거리비례 배분. 용산~서울역 별도 지선(배차 뜸함)은 데이터 부재로 미포함. 절반가량 열차가 덕소 등에서 중간 종착하는 등 실제 배차는 매우 불규칙."
+  },
+  {
+    "id": "suinbundang",
+    "name": "수인분당선",
+    "color": "#FABE00",
+    "operator": "한국철도공사(코레일)",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:00",
+    "lastTrain": "24:00",
+    "mainStops": [
+      {
+        "stationName": "청량리",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "왕십리",
+        "cumulativeKm": 2.4,
+        "travelTimeSec": 210
+      },
+      {
+        "stationName": "서울숲",
+        "cumulativeKm": 4.6,
+        "travelTimeSec": 193
+      },
+      {
+        "stationName": "압구정로데오",
+        "cumulativeKm": 6.5,
+        "travelTimeSec": 167
+      },
+      {
+        "stationName": "강남구청",
+        "cumulativeKm": 7.7,
+        "travelTimeSec": 105
+      },
+      {
+        "stationName": "선정릉",
+        "cumulativeKm": 8.4,
+        "travelTimeSec": 61
+      },
+      {
+        "stationName": "선릉",
+        "cumulativeKm": 9.1,
+        "travelTimeSec": 61
+      },
+      {
+        "stationName": "한티",
+        "cumulativeKm": 10.1,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "도곡",
+        "cumulativeKm": 10.8,
+        "travelTimeSec": 61
+      },
+      {
+        "stationName": "구룡",
+        "cumulativeKm": 11.4,
+        "travelTimeSec": 53
+      },
+      {
+        "stationName": "개포동",
+        "cumulativeKm": 12.1,
+        "travelTimeSec": 61
+      },
+      {
+        "stationName": "대모산입구",
+        "cumulativeKm": 12.7,
+        "travelTimeSec": 53
+      },
+      {
+        "stationName": "수서",
+        "cumulativeKm": 15.7,
+        "travelTimeSec": 263
+      },
+      {
+        "stationName": "복정",
+        "cumulativeKm": 18.9,
+        "travelTimeSec": 281
+      },
+      {
+        "stationName": "가천대",
+        "cumulativeKm": 21.3,
+        "travelTimeSec": 210
+      },
+      {
+        "stationName": "태평",
+        "cumulativeKm": 22.3,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "모란",
+        "cumulativeKm": 23.2,
+        "travelTimeSec": 79
+      },
+      {
+        "stationName": "야탑",
+        "cumulativeKm": 25.5,
+        "travelTimeSec": 202
+      },
+      {
+        "stationName": "이매",
+        "cumulativeKm": 27.2,
+        "travelTimeSec": 149
+      },
+      {
+        "stationName": "서현",
+        "cumulativeKm": 28.6,
+        "travelTimeSec": 123
+      },
+      {
+        "stationName": "수내",
+        "cumulativeKm": 29.7,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "정자",
+        "cumulativeKm": 31.3,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "미금",
+        "cumulativeKm": 33.1,
+        "travelTimeSec": 158
+      },
+      {
+        "stationName": "오리",
+        "cumulativeKm": 34.2,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "죽전",
+        "cumulativeKm": 36,
+        "travelTimeSec": 158
+      },
+      {
+        "stationName": "보정",
+        "cumulativeKm": 37.3,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "구성",
+        "cumulativeKm": 38.9,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "신갈",
+        "cumulativeKm": 40.5,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "기흥",
+        "cumulativeKm": 41.9,
+        "travelTimeSec": 123
+      },
+      {
+        "stationName": "상갈",
+        "cumulativeKm": 43.8,
+        "travelTimeSec": 167
+      },
+      {
+        "stationName": "청명",
+        "cumulativeKm": 46.6,
+        "travelTimeSec": 245
+      },
+      {
+        "stationName": "영통",
+        "cumulativeKm": 47.7,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "망포",
+        "cumulativeKm": 49.2,
+        "travelTimeSec": 132
+      },
+      {
+        "stationName": "매탄권선",
+        "cumulativeKm": 51,
+        "travelTimeSec": 158
+      },
+      {
+        "stationName": "수원시청",
+        "cumulativeKm": 52.4,
+        "travelTimeSec": 123
+      },
+      {
+        "stationName": "매교",
+        "cumulativeKm": 53.8,
+        "travelTimeSec": 123
+      },
+      {
+        "stationName": "수원",
+        "cumulativeKm": 55.3,
+        "travelTimeSec": 132
+      },
+      {
+        "stationName": "고색",
+        "cumulativeKm": 58,
+        "travelTimeSec": 237
+      },
+      {
+        "stationName": "오목천",
+        "cumulativeKm": 59.6,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "어천",
+        "cumulativeKm": 64.7,
+        "travelTimeSec": 447
+      },
+      {
+        "stationName": "야목",
+        "cumulativeKm": 67.3,
+        "travelTimeSec": 228
+      },
+      {
+        "stationName": "사리",
+        "cumulativeKm": 72,
+        "travelTimeSec": 412
+      },
+      {
+        "stationName": "한대앞",
+        "cumulativeKm": 74.2,
+        "travelTimeSec": 193
+      },
+      {
+        "stationName": "중앙",
+        "cumulativeKm": 75.8,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "고잔",
+        "cumulativeKm": 77.2,
+        "travelTimeSec": 123
+      },
+      {
+        "stationName": "초지",
+        "cumulativeKm": 78.7,
+        "travelTimeSec": 132
+      },
+      {
+        "stationName": "안산",
+        "cumulativeKm": 80.5,
+        "travelTimeSec": 158
+      },
+      {
+        "stationName": "신길온천",
+        "cumulativeKm": 82.7,
+        "travelTimeSec": 193
+      },
+      {
+        "stationName": "정왕",
+        "cumulativeKm": 85.6,
+        "travelTimeSec": 254
+      },
+      {
+        "stationName": "오이도",
+        "cumulativeKm": 87,
+        "travelTimeSec": 123
+      },
+      {
+        "stationName": "달월",
+        "cumulativeKm": 89.1,
+        "travelTimeSec": 184
+      },
+      {
+        "stationName": "월곶",
+        "cumulativeKm": 90.6,
+        "travelTimeSec": 132
+      },
+      {
+        "stationName": "소래포구",
+        "cumulativeKm": 91.9,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "인천논현",
+        "cumulativeKm": 92.9,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "호구포",
+        "cumulativeKm": 94.2,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "남동인더스파크",
+        "cumulativeKm": 95.5,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "원인재",
+        "cumulativeKm": 96.5,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "연수",
+        "cumulativeKm": 97.4,
+        "travelTimeSec": 79
+      },
+      {
+        "stationName": "송도",
+        "cumulativeKm": 100.1,
+        "travelTimeSec": 237
+      },
+      {
+        "stationName": "학익",
+        "cumulativeKm": 101.4,
+        "travelTimeSec": 114
+      },
+      {
+        "stationName": "인하대",
+        "cumulativeKm": 102.5,
+        "travelTimeSec": 96
+      },
+      {
+        "stationName": "숭의",
+        "cumulativeKm": 104.3,
+        "travelTimeSec": 158
+      },
+      {
+        "stationName": "신포",
+        "cumulativeKm": 105.8,
+        "travelTimeSec": 132
+      },
+      {
+        "stationName": "인천",
+        "cumulativeKm": 106.9,
+        "travelTimeSec": 96
+      }
+    ],
+    "notes": "나무위키/위키백과 기반 근사치. 왕십리~인천 완행 표정속도(41.06km/h)로 역간 소요시간을 거리비례 배분. 실제로는 청량리~인천 완전직결보다 죽전/고색/오이도 등 중간종착 계통이 대부분."
+  },
+  {
+    "id": "gyeongchun",
+    "name": "경춘선",
+    "color": "#178C72",
+    "operator": "한국철도공사(코레일)",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:00",
+    "lastTrain": "23:30",
+    "mainStops": [
+      {
+        "stationName": "청량리",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "회기",
+        "cumulativeKm": 1.4,
+        "travelTimeSec": 89
+      },
+      {
+        "stationName": "중랑",
+        "cumulativeKm": 3.2,
+        "travelTimeSec": 115
+      },
+      {
+        "stationName": "상봉",
+        "cumulativeKm": 4,
+        "travelTimeSec": 51
+      },
+      {
+        "stationName": "망우",
+        "cumulativeKm": 4.6,
+        "travelTimeSec": 38
+      },
+      {
+        "stationName": "신내",
+        "cumulativeKm": 6.7,
+        "travelTimeSec": 134
+      },
+      {
+        "stationName": "갈매",
+        "cumulativeKm": 9.3,
+        "travelTimeSec": 166
+      },
+      {
+        "stationName": "별내",
+        "cumulativeKm": 10.7,
+        "travelTimeSec": 89
+      },
+      {
+        "stationName": "퇴계원",
+        "cumulativeKm": 12.3,
+        "travelTimeSec": 102
+      },
+      {
+        "stationName": "사릉",
+        "cumulativeKm": 15.6,
+        "travelTimeSec": 210
+      },
+      {
+        "stationName": "금곡",
+        "cumulativeKm": 19.2,
+        "travelTimeSec": 229
+      },
+      {
+        "stationName": "평내호평",
+        "cumulativeKm": 23.2,
+        "travelTimeSec": 255
+      },
+      {
+        "stationName": "천마산",
+        "cumulativeKm": 27.4,
+        "travelTimeSec": 268
+      },
+      {
+        "stationName": "마석",
+        "cumulativeKm": 29.6,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "대성리",
+        "cumulativeKm": 37,
+        "travelTimeSec": 472
+      },
+      {
+        "stationName": "청평",
+        "cumulativeKm": 44.5,
+        "travelTimeSec": 478
+      },
+      {
+        "stationName": "상천",
+        "cumulativeKm": 49.3,
+        "travelTimeSec": 306
+      },
+      {
+        "stationName": "가평",
+        "cumulativeKm": 56.4,
+        "travelTimeSec": 452
+      },
+      {
+        "stationName": "굴봉산",
+        "cumulativeKm": 61.1,
+        "travelTimeSec": 299
+      },
+      {
+        "stationName": "백양리",
+        "cumulativeKm": 64,
+        "travelTimeSec": 185
+      },
+      {
+        "stationName": "강촌",
+        "cumulativeKm": 69.3,
+        "travelTimeSec": 338
+      },
+      {
+        "stationName": "김유정",
+        "cumulativeKm": 76.7,
+        "travelTimeSec": 472
+      },
+      {
+        "stationName": "남춘천",
+        "cumulativeKm": 82.6,
+        "travelTimeSec": 376
+      },
+      {
+        "stationName": "춘천",
+        "cumulativeKm": 85.3,
+        "travelTimeSec": 172
+      }
+    ],
+    "notes": "나무위키/위키백과 기반 근사치. 청량리~춘천 완행 표정속도(56.5km/h)로 역간 소요시간을 거리비례 배분. 실제로는 상봉역 종착이 기본형이며 청량리 연장은 1일 10회뿐."
+  }
+]

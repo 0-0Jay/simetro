@@ -1,0 +1,845 @@
+[
+  {
+    "id": "incheon1",
+    "name": "인천1호선",
+    "color": "#7CA8D5",
+    "operator": "인천교통공사",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:39",
+    "lastTrain": "24:10",
+    "mainStops": [
+      {
+        "stationName": "계양",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "귤현",
+        "cumulativeKm": 1.7,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "박촌",
+        "cumulativeKm": 3.4,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "임학",
+        "cumulativeKm": 5.09,
+        "travelTimeSec": 153
+      },
+      {
+        "stationName": "계산",
+        "cumulativeKm": 6.79,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "경인교대입구",
+        "cumulativeKm": 8.49,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "작전",
+        "cumulativeKm": 10.19,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "갈산",
+        "cumulativeKm": 11.88,
+        "travelTimeSec": 153
+      },
+      {
+        "stationName": "부평구청",
+        "cumulativeKm": 13.58,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "부평시장",
+        "cumulativeKm": 14.78,
+        "travelTimeSec": 109
+      },
+      {
+        "stationName": "부평",
+        "cumulativeKm": 17.32,
+        "travelTimeSec": 230
+      },
+      {
+        "stationName": "동수",
+        "cumulativeKm": 19.52,
+        "travelTimeSec": 199
+      },
+      {
+        "stationName": "부평삼거리",
+        "cumulativeKm": 20.94,
+        "travelTimeSec": 128
+      },
+      {
+        "stationName": "간석오거리",
+        "cumulativeKm": 22.35,
+        "travelTimeSec": 128
+      },
+      {
+        "stationName": "인천시청",
+        "cumulativeKm": 23.77,
+        "travelTimeSec": 128
+      },
+      {
+        "stationName": "예술회관",
+        "cumulativeKm": 24.56,
+        "travelTimeSec": 71
+      },
+      {
+        "stationName": "인천터미널",
+        "cumulativeKm": 25.34,
+        "travelTimeSec": 71
+      },
+      {
+        "stationName": "문학경기장",
+        "cumulativeKm": 26.13,
+        "travelTimeSec": 71
+      },
+      {
+        "stationName": "선학",
+        "cumulativeKm": 26.91,
+        "travelTimeSec": 71
+      },
+      {
+        "stationName": "신연수",
+        "cumulativeKm": 27.7,
+        "travelTimeSec": 71
+      },
+      {
+        "stationName": "원인재",
+        "cumulativeKm": 28.52,
+        "travelTimeSec": 74
+      },
+      {
+        "stationName": "동춘",
+        "cumulativeKm": 29.49,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "동막",
+        "cumulativeKm": 30.43,
+        "travelTimeSec": 85
+      },
+      {
+        "stationName": "캠퍼스타운",
+        "cumulativeKm": 31.38,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "테크노파크",
+        "cumulativeKm": 32.35,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "지식정보단지",
+        "cumulativeKm": 33.3,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "인천대입구",
+        "cumulativeKm": 34.24,
+        "travelTimeSec": 85
+      },
+      {
+        "stationName": "센트럴파크",
+        "cumulativeKm": 35.21,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "국제업무지구",
+        "cumulativeKm": 36.16,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "송도달빛축제공원",
+        "cumulativeKm": 37.1,
+        "travelTimeSec": 85
+      }
+    ],
+    "notes": "실제 총연장(37.1km)·표정속도(39.8km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "incheon2",
+    "name": "인천2호선",
+    "color": "#ED8B00",
+    "operator": "인천교통공사",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "25:05",
+    "mainStops": [
+      {
+        "stationName": "검단오류",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "왕길",
+        "cumulativeKm": 0.93,
+        "travelTimeSec": 101
+      },
+      {
+        "stationName": "검단사거리",
+        "cumulativeKm": 1.88,
+        "travelTimeSec": 103
+      },
+      {
+        "stationName": "마전",
+        "cumulativeKm": 2.81,
+        "travelTimeSec": 101
+      },
+      {
+        "stationName": "완정",
+        "cumulativeKm": 3.74,
+        "travelTimeSec": 101
+      },
+      {
+        "stationName": "독정",
+        "cumulativeKm": 4.7,
+        "travelTimeSec": 104
+      },
+      {
+        "stationName": "검암",
+        "cumulativeKm": 5.62,
+        "travelTimeSec": 99
+      },
+      {
+        "stationName": "검바위",
+        "cumulativeKm": 6.33,
+        "travelTimeSec": 77
+      },
+      {
+        "stationName": "아시아드경기장",
+        "cumulativeKm": 7.03,
+        "travelTimeSec": 76
+      },
+      {
+        "stationName": "서구청",
+        "cumulativeKm": 7.73,
+        "travelTimeSec": 76
+      },
+      {
+        "stationName": "가정",
+        "cumulativeKm": 8.43,
+        "travelTimeSec": 76
+      },
+      {
+        "stationName": "가정중앙시장",
+        "cumulativeKm": 9.14,
+        "travelTimeSec": 77
+      },
+      {
+        "stationName": "석남",
+        "cumulativeKm": 9.84,
+        "travelTimeSec": 76
+      },
+      {
+        "stationName": "서부여성회관",
+        "cumulativeKm": 11.42,
+        "travelTimeSec": 171
+      },
+      {
+        "stationName": "인천가좌",
+        "cumulativeKm": 13.02,
+        "travelTimeSec": 173
+      },
+      {
+        "stationName": "가재울",
+        "cumulativeKm": 14.59,
+        "travelTimeSec": 170
+      },
+      {
+        "stationName": "주안국가산단",
+        "cumulativeKm": 16.17,
+        "travelTimeSec": 171
+      },
+      {
+        "stationName": "주안",
+        "cumulativeKm": 17.77,
+        "travelTimeSec": 173
+      },
+      {
+        "stationName": "시민공원",
+        "cumulativeKm": 19.18,
+        "travelTimeSec": 152
+      },
+      {
+        "stationName": "석바위시장",
+        "cumulativeKm": 20.58,
+        "travelTimeSec": 151
+      },
+      {
+        "stationName": "인천시청",
+        "cumulativeKm": 22.07,
+        "travelTimeSec": 161
+      },
+      {
+        "stationName": "석천사거리",
+        "cumulativeKm": 23.34,
+        "travelTimeSec": 137
+      },
+      {
+        "stationName": "모래내시장",
+        "cumulativeKm": 24.49,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "만수",
+        "cumulativeKm": 25.67,
+        "travelTimeSec": 128
+      },
+      {
+        "stationName": "남동구청",
+        "cumulativeKm": 26.82,
+        "travelTimeSec": 124
+      },
+      {
+        "stationName": "인천대공원",
+        "cumulativeKm": 27.98,
+        "travelTimeSec": 125
+      },
+      {
+        "stationName": "운연",
+        "cumulativeKm": 29.1,
+        "travelTimeSec": 121
+      }
+    ],
+    "notes": "실제 총연장(29.1km)·표정속도(33.3km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "sinbundang",
+    "name": "신분당선",
+    "color": "#D4003B",
+    "operator": "신분당선주식회사",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "25:00",
+    "mainStops": [
+      {
+        "stationName": "신사",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "논현",
+        "cumulativeKm": 2.21,
+        "travelTimeSec": 167
+      },
+      {
+        "stationName": "신논현",
+        "cumulativeKm": 4.06,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "강남",
+        "cumulativeKm": 8.62,
+        "travelTimeSec": 344
+      },
+      {
+        "stationName": "양재",
+        "cumulativeKm": 12.86,
+        "travelTimeSec": 320
+      },
+      {
+        "stationName": "양재시민의숲",
+        "cumulativeKm": 15.17,
+        "travelTimeSec": 174
+      },
+      {
+        "stationName": "청계산입구",
+        "cumulativeKm": 17.47,
+        "travelTimeSec": 174
+      },
+      {
+        "stationName": "판교",
+        "cumulativeKm": 19.81,
+        "travelTimeSec": 177
+      },
+      {
+        "stationName": "정자",
+        "cumulativeKm": 22.21,
+        "travelTimeSec": 181
+      },
+      {
+        "stationName": "미금",
+        "cumulativeKm": 24.37,
+        "travelTimeSec": 163
+      },
+      {
+        "stationName": "동천",
+        "cumulativeKm": 25.91,
+        "travelTimeSec": 116
+      },
+      {
+        "stationName": "수지구청",
+        "cumulativeKm": 27.4,
+        "travelTimeSec": 112
+      },
+      {
+        "stationName": "성복",
+        "cumulativeKm": 28.89,
+        "travelTimeSec": 112
+      },
+      {
+        "stationName": "상현",
+        "cumulativeKm": 30.42,
+        "travelTimeSec": 115
+      },
+      {
+        "stationName": "광교중앙",
+        "cumulativeKm": 31.91,
+        "travelTimeSec": 112
+      },
+      {
+        "stationName": "광교",
+        "cumulativeKm": 33.4,
+        "travelTimeSec": 112
+      }
+    ],
+    "notes": "실제 총연장(33.4km)·표정속도(47.7km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "gyeonggang",
+    "name": "경강선",
+    "color": "#003DA5",
+    "operator": "한국철도공사(코레일)",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "23:25",
+    "mainStops": [
+      {
+        "stationName": "판교",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "이매",
+        "cumulativeKm": 10.67,
+        "travelTimeSec": 560
+      },
+      {
+        "stationName": "삼동",
+        "cumulativeKm": 16,
+        "travelTimeSec": 280
+      },
+      {
+        "stationName": "경기광주",
+        "cumulativeKm": 21.03,
+        "travelTimeSec": 264
+      },
+      {
+        "stationName": "초월",
+        "cumulativeKm": 26.05,
+        "travelTimeSec": 263
+      },
+      {
+        "stationName": "곤지암",
+        "cumulativeKm": 30.97,
+        "travelTimeSec": 258
+      },
+      {
+        "stationName": "신둔도예촌",
+        "cumulativeKm": 36,
+        "travelTimeSec": 264
+      },
+      {
+        "stationName": "이천",
+        "cumulativeKm": 41.03,
+        "travelTimeSec": 264
+      },
+      {
+        "stationName": "부발",
+        "cumulativeKm": 46.05,
+        "travelTimeSec": 263
+      },
+      {
+        "stationName": "세종대왕릉",
+        "cumulativeKm": 51.08,
+        "travelTimeSec": 264
+      },
+      {
+        "stationName": "여주",
+        "cumulativeKm": 56,
+        "travelTimeSec": 258
+      }
+    ],
+    "notes": "실제 총연장(56km)·표정속도(68.6km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "seohae",
+    "name": "서해선",
+    "color": "#81A914",
+    "operator": "서해선㈜/한국철도공사",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "24:00",
+    "mainStops": [
+      {
+        "stationName": "대곡",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "능곡",
+        "cumulativeKm": 2.02,
+        "travelTimeSec": 176
+      },
+      {
+        "stationName": "김포공항",
+        "cumulativeKm": 5.95,
+        "travelTimeSec": 343
+      },
+      {
+        "stationName": "원종",
+        "cumulativeKm": 13.98,
+        "travelTimeSec": 700
+      },
+      {
+        "stationName": "부천종합운동장",
+        "cumulativeKm": 20.6,
+        "travelTimeSec": 577
+      },
+      {
+        "stationName": "소사",
+        "cumulativeKm": 22.82,
+        "travelTimeSec": 194
+      },
+      {
+        "stationName": "소새울",
+        "cumulativeKm": 24.53,
+        "travelTimeSec": 149
+      },
+      {
+        "stationName": "시흥대야",
+        "cumulativeKm": 26.3,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "신천",
+        "cumulativeKm": 28.06,
+        "travelTimeSec": 153
+      },
+      {
+        "stationName": "신현",
+        "cumulativeKm": 29.83,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "시흥시청",
+        "cumulativeKm": 31.6,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "시흥능곡",
+        "cumulativeKm": 33.2,
+        "travelTimeSec": 139
+      },
+      {
+        "stationName": "달미",
+        "cumulativeKm": 34.97,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "선부",
+        "cumulativeKm": 36.74,
+        "travelTimeSec": 154
+      },
+      {
+        "stationName": "초지",
+        "cumulativeKm": 38.28,
+        "travelTimeSec": 134
+      },
+      {
+        "stationName": "시우",
+        "cumulativeKm": 39.49,
+        "travelTimeSec": 105
+      },
+      {
+        "stationName": "원시",
+        "cumulativeKm": 40.3,
+        "travelTimeSec": 71
+      }
+    ],
+    "notes": "실제 총연장(40.3km)·표정속도(41.3km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "uijeongbuLrt",
+    "name": "의정부경전철",
+    "color": "#FDA600",
+    "operator": "의정부경전철㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:00",
+    "lastTrain": "24:15",
+    "mainStops": [
+      {
+        "stationName": "탑석",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "송산",
+        "cumulativeKm": 0.79,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "어룡",
+        "cumulativeKm": 1.57,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "곤제",
+        "cumulativeKm": 2.36,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "효자",
+        "cumulativeKm": 3.13,
+        "travelTimeSec": 85
+      },
+      {
+        "stationName": "경기도청북부청사",
+        "cumulativeKm": 3.91,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "새말",
+        "cumulativeKm": 4.7,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "동오",
+        "cumulativeKm": 5.48,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "의정부중앙",
+        "cumulativeKm": 6.27,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "흥선",
+        "cumulativeKm": 7.05,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "의정부시청",
+        "cumulativeKm": 7.82,
+        "travelTimeSec": 85
+      },
+      {
+        "stationName": "경전철의정부",
+        "cumulativeKm": 8.61,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "범골",
+        "cumulativeKm": 9.4,
+        "travelTimeSec": 88
+      },
+      {
+        "stationName": "회룡",
+        "cumulativeKm": 10.18,
+        "travelTimeSec": 86
+      },
+      {
+        "stationName": "발곡",
+        "cumulativeKm": 10.6,
+        "travelTimeSec": 47
+      }
+    ],
+    "notes": "실제 총연장(10.6km)·표정속도(32.5km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "yonginEverline",
+    "name": "용인에버라인",
+    "color": "#509F22",
+    "operator": "용인경량전철㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "23:30",
+    "mainStops": [
+      {
+        "stationName": "기흥",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "강남대",
+        "cumulativeKm": 1.39,
+        "travelTimeSec": 127
+      },
+      {
+        "stationName": "지석",
+        "cumulativeKm": 2.7,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "어정",
+        "cumulativeKm": 4.01,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "동백",
+        "cumulativeKm": 5.32,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "초당",
+        "cumulativeKm": 6.63,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "삼가",
+        "cumulativeKm": 7.94,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "시청·용인대",
+        "cumulativeKm": 9.25,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "명지대",
+        "cumulativeKm": 10.56,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "김량장",
+        "cumulativeKm": 11.87,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "운동장·송담대",
+        "cumulativeKm": 13.18,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "고진",
+        "cumulativeKm": 14.49,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "보평",
+        "cumulativeKm": 15.8,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "둔전",
+        "cumulativeKm": 17.11,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "전대·에버랜드",
+        "cumulativeKm": 18.4,
+        "travelTimeSec": 118
+      }
+    ],
+    "notes": "실제 총연장(18.404km)·표정속도(39.4km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "incheonMaglev",
+    "name": "인천공항자기부상철도",
+    "color": "#FFCD12",
+    "operator": "인천교통공사",
+    "dataConfidence": "approximate",
+    "firstTrain": "10:00",
+    "lastTrain": "17:00",
+    "mainStops": [
+      {
+        "stationName": "용유",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "워터파크",
+        "cumulativeKm": 1.23,
+        "travelTimeSec": 181
+      },
+      {
+        "stationName": "파라다이스시티",
+        "cumulativeKm": 2.46,
+        "travelTimeSec": 181
+      },
+      {
+        "stationName": "합동청사",
+        "cumulativeKm": 3.68,
+        "travelTimeSec": 180
+      },
+      {
+        "stationName": "장기주차장",
+        "cumulativeKm": 4.91,
+        "travelTimeSec": 181
+      },
+      {
+        "stationName": "인천공항1터미널",
+        "cumulativeKm": 6.1,
+        "travelTimeSec": 176
+      }
+    ],
+    "notes": "실제 총연장(6.1km)·표정속도(24.4km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  },
+  {
+    "id": "gimpoGoldline",
+    "name": "김포골드라인",
+    "color": "#A17800",
+    "operator": "김포골드라인운영㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "24:27",
+    "mainStops": [
+      {
+        "stationName": "양촌",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "구래",
+        "cumulativeKm": 2.65,
+        "travelTimeSec": 212
+      },
+      {
+        "stationName": "마산",
+        "cumulativeKm": 5.24,
+        "travelTimeSec": 207
+      },
+      {
+        "stationName": "장기",
+        "cumulativeKm": 7.88,
+        "travelTimeSec": 211
+      },
+      {
+        "stationName": "운양",
+        "cumulativeKm": 10.48,
+        "travelTimeSec": 208
+      },
+      {
+        "stationName": "걸포북변",
+        "cumulativeKm": 13.12,
+        "travelTimeSec": 211
+      },
+      {
+        "stationName": "사우(김포시청)",
+        "cumulativeKm": 15.72,
+        "travelTimeSec": 208
+      },
+      {
+        "stationName": "풍무",
+        "cumulativeKm": 18.36,
+        "travelTimeSec": 211
+      },
+      {
+        "stationName": "고촌",
+        "cumulativeKm": 21.01,
+        "travelTimeSec": 212
+      },
+      {
+        "stationName": "김포공항",
+        "cumulativeKm": 23.6,
+        "travelTimeSec": 207
+      }
+    ],
+    "notes": "실제 총연장(23.6km)·표정속도(45.08km/h)는 리서치 기반. 역 순서/상대위치는 nuua 지하철 노선도의 실제 벡터 좌표를 기하학적으로 투영해 확정."
+  }
+]

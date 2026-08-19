@@ -1,0 +1,153 @@
+[
+  {
+    "id": "airport",
+    "name": "공항철도",
+    "color": "#0090D2",
+    "operator": "공항철도주식회사",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:20",
+    "lastTrain": "24:00",
+    "mainStops": [
+      {
+        "stationName": "서울역",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "공덕",
+        "cumulativeKm": 3.3,
+        "travelTimeSec": 205
+      },
+      {
+        "stationName": "홍대입구",
+        "cumulativeKm": 6.1,
+        "travelTimeSec": 174
+      },
+      {
+        "stationName": "디지털미디어시티",
+        "cumulativeKm": 9.5,
+        "travelTimeSec": 211
+      },
+      {
+        "stationName": "마곡나루",
+        "cumulativeKm": 18.1,
+        "travelTimeSec": 534
+      },
+      {
+        "stationName": "김포공항",
+        "cumulativeKm": 20.4,
+        "travelTimeSec": 143
+      },
+      {
+        "stationName": "계양",
+        "cumulativeKm": 27,
+        "travelTimeSec": 410
+      },
+      {
+        "stationName": "검암",
+        "cumulativeKm": 32.5,
+        "travelTimeSec": 341
+      },
+      {
+        "stationName": "청라국제도시",
+        "cumulativeKm": 37.3,
+        "travelTimeSec": 298
+      },
+      {
+        "stationName": "영종",
+        "cumulativeKm": 47.6,
+        "travelTimeSec": 639
+      },
+      {
+        "stationName": "운서",
+        "cumulativeKm": 51.1,
+        "travelTimeSec": 217
+      },
+      {
+        "stationName": "공항화물청사",
+        "cumulativeKm": 55.4,
+        "travelTimeSec": 267
+      },
+      {
+        "stationName": "인천공항1터미널",
+        "cumulativeKm": 58,
+        "travelTimeSec": 161
+      },
+      {
+        "stationName": "인천공항2터미널",
+        "cumulativeKm": 63.8,
+        "travelTimeSec": 360
+      }
+    ],
+    "notes": "나무위키/위키백과 기반 근사치. 일반열차(각역정차) 기준, 직통열차는 미반영. 표정속도(58km/h) 거리비례 배분."
+  },
+  {
+    "id": "gtxa-north",
+    "name": "GTX-A (운정~서울역)",
+    "color": "#9A6292",
+    "operator": "SG레일㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "24:38",
+    "mainStops": [
+      {
+        "stationName": "운정중앙",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "킨텍스",
+        "cumulativeKm": 6.1,
+        "travelTimeSec": 244
+      },
+      {
+        "stationName": "대곡",
+        "cumulativeKm": 13,
+        "travelTimeSec": 276
+      },
+      {
+        "stationName": "연신내",
+        "cumulativeKm": 22.9,
+        "travelTimeSec": 396
+      },
+      {
+        "stationName": "서울역",
+        "cumulativeKm": 32.3,
+        "travelTimeSec": 376
+      }
+    ],
+    "notes": "2026년 8월 기준 실제 개통·운행 중인 구간만 반영. 창릉역은 공사 중(미개통)이라 제외. 서울역~수서 구간은 삼성역 부실시공 문제로 미개통(빨라야 2026년말) — 별도 gtxa-south 노선으로 분리."
+  },
+  {
+    "id": "gtxa-south",
+    "name": "GTX-A (수서~동탄)",
+    "color": "#9A6292",
+    "operator": "SG레일㈜",
+    "dataConfidence": "approximate",
+    "firstTrain": "05:30",
+    "lastTrain": "25:00",
+    "mainStops": [
+      {
+        "stationName": "수서",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "성남",
+        "cumulativeKm": 10.7,
+        "travelTimeSec": 438
+      },
+      {
+        "stationName": "구성",
+        "cumulativeKm": 21.6,
+        "travelTimeSec": 446
+      },
+      {
+        "stationName": "동탄",
+        "cumulativeKm": 28,
+        "travelTimeSec": 262
+      }
+    ],
+    "notes": "2026년 8월 기준 실제 개통·운행 중인 구간. 서울역~수서로 gtxa-north와 아직 연결되지 않은 독립 구간."
+  }
+]

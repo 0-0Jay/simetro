@@ -1,0 +1,1528 @@
+[
+  {
+    "id": "line1",
+    "name": "1호선",
+    "color": "#0052A4",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "서울역",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "시청",
+        "cumulativeKm": 1.1,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "종각",
+        "cumulativeKm": 2.1,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "종로3가",
+        "cumulativeKm": 2.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "종로5가",
+        "cumulativeKm": 3.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "동대문",
+        "cumulativeKm": 4.6,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "동묘앞",
+        "cumulativeKm": 5.2,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "신설동",
+        "cumulativeKm": 5.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "제기동",
+        "cumulativeKm": 6.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "청량리",
+        "cumulativeKm": 7.8,
+        "travelTimeSec": 90
+      }
+    ],
+    "notes": "서울교통공사 관할 구간(서울역~청량리)만 포함. 실제 1호선은 경부선/경인선/경원선과 직결 운행하여 인천·신창·소요산까지 이어지나 해당 구간은 코레일 관할로 데이터 미포함."
+  },
+  {
+    "id": "line2",
+    "name": "2호선",
+    "color": "#00A84D",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "시청",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "을지로입구",
+        "cumulativeKm": 0.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "을지로3가",
+        "cumulativeKm": 1.5,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "을지로4가",
+        "cumulativeKm": 2.1,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "동대문역사문화공원",
+        "cumulativeKm": 3.1,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "신당",
+        "cumulativeKm": 4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "상왕십리",
+        "cumulativeKm": 4.9,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "왕십리",
+        "cumulativeKm": 5.7,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "한양대",
+        "cumulativeKm": 6.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "뚝섬",
+        "cumulativeKm": 7.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "성수",
+        "cumulativeKm": 8.6,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "건대입구",
+        "cumulativeKm": 9.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "구의",
+        "cumulativeKm": 11.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "강변",
+        "cumulativeKm": 12.3,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "잠실나루",
+        "cumulativeKm": 14.1,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "잠실",
+        "cumulativeKm": 15.1,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "잠실새내",
+        "cumulativeKm": 16.3,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "종합운동장",
+        "cumulativeKm": 17.5,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "삼성",
+        "cumulativeKm": 18.5,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "선릉",
+        "cumulativeKm": 19.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "역삼",
+        "cumulativeKm": 21,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "강남",
+        "cumulativeKm": 21.8,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "교대",
+        "cumulativeKm": 23,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "서초",
+        "cumulativeKm": 23.7,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "방배",
+        "cumulativeKm": 25.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "사당",
+        "cumulativeKm": 27,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "낙성대",
+        "cumulativeKm": 28.7,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "서울대입구",
+        "cumulativeKm": 29.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "봉천",
+        "cumulativeKm": 30.7,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "신림",
+        "cumulativeKm": 31.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "신대방",
+        "cumulativeKm": 33.6,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "구로디지털단지",
+        "cumulativeKm": 34.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "대림",
+        "cumulativeKm": 35.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "신도림",
+        "cumulativeKm": 37.6,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "문래",
+        "cumulativeKm": 38.8,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "영등포구청",
+        "cumulativeKm": 39.7,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "당산",
+        "cumulativeKm": 40.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "합정",
+        "cumulativeKm": 42.8,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "홍대입구",
+        "cumulativeKm": 43.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "신촌",
+        "cumulativeKm": 45.2,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "이대",
+        "cumulativeKm": 46,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "아현",
+        "cumulativeKm": 46.9,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "충정로",
+        "cumulativeKm": 47.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "시청",
+        "cumulativeKm": 48.8,
+        "travelTimeSec": 90
+      }
+    ],
+    "branches": [
+      {
+        "fromStationName": "성수",
+        "label": "성수지선",
+        "stops": [
+          {
+            "stationName": "용답",
+            "cumulativeKm": 51.1,
+            "travelTimeSec": 180
+          },
+          {
+            "stationName": "신답",
+            "cumulativeKm": 52.1,
+            "travelTimeSec": 90
+          },
+          {
+            "stationName": "용두",
+            "cumulativeKm": 53,
+            "travelTimeSec": 90
+          },
+          {
+            "stationName": "신설동",
+            "cumulativeKm": 54.2,
+            "travelTimeSec": 90
+          }
+        ]
+      },
+      {
+        "fromStationName": "신도림",
+        "label": "신정지선",
+        "stops": [
+          {
+            "stationName": "도림천",
+            "cumulativeKm": 55.2,
+            "travelTimeSec": 90
+          },
+          {
+            "stationName": "양천구청",
+            "cumulativeKm": 56.9,
+            "travelTimeSec": 150
+          },
+          {
+            "stationName": "신정네거리",
+            "cumulativeKm": 58.8,
+            "travelTimeSec": 180
+          },
+          {
+            "stationName": "까치산",
+            "cumulativeKm": 60.2,
+            "travelTimeSec": 150
+          }
+        ]
+      }
+    ],
+    "isLoop": true
+  },
+  {
+    "id": "line3",
+    "name": "3호선",
+    "color": "#EF7C1C",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "지축",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "구파발",
+        "cumulativeKm": 1.5,
+        "travelTimeSec": 180
+      },
+      {
+        "stationName": "연신내",
+        "cumulativeKm": 3.5,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "불광",
+        "cumulativeKm": 4.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "녹번",
+        "cumulativeKm": 5.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "홍제",
+        "cumulativeKm": 7.5,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "무악재",
+        "cumulativeKm": 8.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "독립문",
+        "cumulativeKm": 9.5,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "경복궁",
+        "cumulativeKm": 11.1,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "안국",
+        "cumulativeKm": 12.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "종로3가",
+        "cumulativeKm": 13.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "을지로3가",
+        "cumulativeKm": 13.8,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "충무로",
+        "cumulativeKm": 14.5,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "동대입구",
+        "cumulativeKm": 15.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "약수",
+        "cumulativeKm": 16.1,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "금호",
+        "cumulativeKm": 16.9,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "옥수",
+        "cumulativeKm": 17.7,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "압구정",
+        "cumulativeKm": 19.8,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "신사",
+        "cumulativeKm": 21.3,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "잠원",
+        "cumulativeKm": 22.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "고속터미널",
+        "cumulativeKm": 23.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "교대",
+        "cumulativeKm": 25,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "남부터미널",
+        "cumulativeKm": 25.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "양재",
+        "cumulativeKm": 27.7,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "매봉",
+        "cumulativeKm": 28.9,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "도곡",
+        "cumulativeKm": 29.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "대치",
+        "cumulativeKm": 30.5,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "학여울",
+        "cumulativeKm": 31.3,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "대청",
+        "cumulativeKm": 32.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "일원",
+        "cumulativeKm": 33.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "수서",
+        "cumulativeKm": 35.2,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "가락시장",
+        "cumulativeKm": 36.6,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "경찰병원",
+        "cumulativeKm": 37.4,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "오금",
+        "cumulativeKm": 38.2,
+        "travelTimeSec": 60
+      }
+    ],
+    "notes": "서울교통공사 관할 구간(지축~오금)만 포함. 대화~지축 구간(일산선)은 코레일 위탁 구간으로 데이터 미포함."
+  },
+  {
+    "id": "line4",
+    "name": "4호선",
+    "color": "#00A5DE",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "당고개",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "상계",
+        "cumulativeKm": 1.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "노원",
+        "cumulativeKm": 2.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "창동",
+        "cumulativeKm": 3.6,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "쌍문",
+        "cumulativeKm": 4.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "수유",
+        "cumulativeKm": 6.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "미아",
+        "cumulativeKm": 7.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "미아사거리",
+        "cumulativeKm": 9.3,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "길음",
+        "cumulativeKm": 10.6,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "성신여대입구",
+        "cumulativeKm": 12,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "한성대입구",
+        "cumulativeKm": 13,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "혜화",
+        "cumulativeKm": 13.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "동대문",
+        "cumulativeKm": 15.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "동대문역사문화공원",
+        "cumulativeKm": 16.1,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "충무로",
+        "cumulativeKm": 17.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "명동",
+        "cumulativeKm": 18.1,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "회현",
+        "cumulativeKm": 18.8,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "서울역",
+        "cumulativeKm": 19.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "숙대입구",
+        "cumulativeKm": 20.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "삼각지",
+        "cumulativeKm": 21.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "신용산",
+        "cumulativeKm": 22.6,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "이촌",
+        "cumulativeKm": 23.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "동작",
+        "cumulativeKm": 26.6,
+        "travelTimeSec": 180
+      },
+      {
+        "stationName": "총신대입구",
+        "cumulativeKm": 28.4,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "사당",
+        "cumulativeKm": 29.5,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "남태령",
+        "cumulativeKm": 31.1,
+        "travelTimeSec": 90
+      }
+    ],
+    "notes": "서울교통공사 관할 구간(당고개~남태령)만 포함. 남태령 이남 과천선/안산선(오이도 방면)은 코레일 관할로 데이터 미포함."
+  },
+  {
+    "id": "line5",
+    "name": "5호선",
+    "color": "#996CAC",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "방화",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "개화산",
+        "cumulativeKm": 0.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "김포공항",
+        "cumulativeKm": 2.1,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "송정",
+        "cumulativeKm": 3.3,
+        "travelTimeSec": 130
+      },
+      {
+        "stationName": "마곡",
+        "cumulativeKm": 4.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "발산",
+        "cumulativeKm": 5.6,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "우장산",
+        "cumulativeKm": 6.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "화곡",
+        "cumulativeKm": 7.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "까치산",
+        "cumulativeKm": 8.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "신정",
+        "cumulativeKm": 10.2,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "목동",
+        "cumulativeKm": 11,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "오목교",
+        "cumulativeKm": 11.9,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "양평",
+        "cumulativeKm": 12.9,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "영등포구청",
+        "cumulativeKm": 13.7,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "영등포시장",
+        "cumulativeKm": 14.6,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "신길",
+        "cumulativeKm": 15.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "여의도",
+        "cumulativeKm": 16.7,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "여의나루",
+        "cumulativeKm": 17.7,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "마포",
+        "cumulativeKm": 19.5,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "공덕",
+        "cumulativeKm": 20.3,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "애오개",
+        "cumulativeKm": 21.4,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "충정로",
+        "cumulativeKm": 22.3,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "서대문",
+        "cumulativeKm": 23,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "광화문",
+        "cumulativeKm": 24.1,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "종로3가",
+        "cumulativeKm": 25.3,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "을지로4가",
+        "cumulativeKm": 26.3,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "동대문역사문화공원",
+        "cumulativeKm": 27.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "청구",
+        "cumulativeKm": 28.1,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "신금호",
+        "cumulativeKm": 29,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "행당",
+        "cumulativeKm": 29.9,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "왕십리",
+        "cumulativeKm": 30.8,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "마장",
+        "cumulativeKm": 31.5,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "답십리",
+        "cumulativeKm": 32.5,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "장한평",
+        "cumulativeKm": 33.7,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "군자",
+        "cumulativeKm": 35.2,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "아차산",
+        "cumulativeKm": 36.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "광나루",
+        "cumulativeKm": 37.7,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "천호",
+        "cumulativeKm": 39.7,
+        "travelTimeSec": 130
+      },
+      {
+        "stationName": "강동",
+        "cumulativeKm": 40.5,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "길동",
+        "cumulativeKm": 41.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "굽은다리",
+        "cumulativeKm": 42.2,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "명일",
+        "cumulativeKm": 43,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "고덕",
+        "cumulativeKm": 44.2,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "상일동",
+        "cumulativeKm": 45.3,
+        "travelTimeSec": 100
+      }
+    ],
+    "branches": [
+      {
+        "fromStationName": "상일동",
+        "label": "하남선",
+        "stops": [
+          {
+            "stationName": "강일",
+            "cumulativeKm": 46.1,
+            "travelTimeSec": 110
+          },
+          {
+            "stationName": "미사",
+            "cumulativeKm": 47.8,
+            "travelTimeSec": 110
+          },
+          {
+            "stationName": "하남풍산",
+            "cumulativeKm": 49.9,
+            "travelTimeSec": 150
+          },
+          {
+            "stationName": "하남시청",
+            "cumulativeKm": 51.2,
+            "travelTimeSec": 110
+          },
+          {
+            "stationName": "하남검단산",
+            "cumulativeKm": 52.8,
+            "travelTimeSec": 150
+          }
+        ]
+      },
+      {
+        "fromStationName": "상일동",
+        "label": "마천지선",
+        "stops": [
+          {
+            "stationName": "둔촌동",
+            "cumulativeKm": 54,
+            "travelTimeSec": 110
+          },
+          {
+            "stationName": "올림픽공원",
+            "cumulativeKm": 55.4,
+            "travelTimeSec": 100
+          },
+          {
+            "stationName": "방이",
+            "cumulativeKm": 56.2,
+            "travelTimeSec": 80
+          },
+          {
+            "stationName": "오금",
+            "cumulativeKm": 57.1,
+            "travelTimeSec": 80
+          },
+          {
+            "stationName": "개롱",
+            "cumulativeKm": 58,
+            "travelTimeSec": 70
+          },
+          {
+            "stationName": "거여",
+            "cumulativeKm": 58.9,
+            "travelTimeSec": 80
+          },
+          {
+            "stationName": "마천",
+            "cumulativeKm": 59.8,
+            "travelTimeSec": 90
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "line6",
+    "name": "6호선",
+    "color": "#CD7C2F",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "응암",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "새절",
+        "cumulativeKm": 0.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "증산",
+        "cumulativeKm": 1.8,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "디지털미디어시티",
+        "cumulativeKm": 2.9,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "월드컵경기장",
+        "cumulativeKm": 3.7,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "마포구청",
+        "cumulativeKm": 4.5,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "망원",
+        "cumulativeKm": 5.5,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "합정",
+        "cumulativeKm": 6.3,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "상수",
+        "cumulativeKm": 7.1,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "광흥창",
+        "cumulativeKm": 8,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "대흥",
+        "cumulativeKm": 9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "공덕",
+        "cumulativeKm": 9.9,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "효창공원앞",
+        "cumulativeKm": 10.8,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "삼각지",
+        "cumulativeKm": 12,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "녹사평",
+        "cumulativeKm": 13.1,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "이태원",
+        "cumulativeKm": 13.9,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "한강진",
+        "cumulativeKm": 14.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "버티고개",
+        "cumulativeKm": 15.9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "약수",
+        "cumulativeKm": 16.6,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "청구",
+        "cumulativeKm": 17.4,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "신당",
+        "cumulativeKm": 18.1,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "동묘앞",
+        "cumulativeKm": 18.7,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "창신",
+        "cumulativeKm": 19.6,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "보문",
+        "cumulativeKm": 20.4,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "안암",
+        "cumulativeKm": 21.3,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "고려대",
+        "cumulativeKm": 22.1,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "월곡",
+        "cumulativeKm": 23.5,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "상월곡",
+        "cumulativeKm": 24.3,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "돌곶이",
+        "cumulativeKm": 25.1,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "석계",
+        "cumulativeKm": 26.1,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "태릉입구",
+        "cumulativeKm": 26.9,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "화랑대",
+        "cumulativeKm": 27.8,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "봉화산",
+        "cumulativeKm": 28.5,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "신내역",
+        "cumulativeKm": 29.8,
+        "travelTimeSec": 270
+      }
+    ],
+    "branches": [
+      {
+        "fromStationName": "응암",
+        "label": "응암순환",
+        "stops": [
+          {
+            "stationName": "역촌",
+            "cumulativeKm": 1.1,
+            "travelTimeSec": 100
+          },
+          {
+            "stationName": "불광",
+            "cumulativeKm": 1.9,
+            "travelTimeSec": 80
+          },
+          {
+            "stationName": "독바위",
+            "cumulativeKm": 2.8,
+            "travelTimeSec": 80
+          },
+          {
+            "stationName": "연신내",
+            "cumulativeKm": 4.2,
+            "travelTimeSec": 130
+          },
+          {
+            "stationName": "구산",
+            "cumulativeKm": 5.1,
+            "travelTimeSec": 80
+          },
+          {
+            "stationName": "응암",
+            "cumulativeKm": 6.6,
+            "travelTimeSec": 120
+          }
+        ]
+      }
+    ],
+    "notes": "응암→새절 구간은 공식 역간거리 데이터가 없어 근사치(90초) 사용"
+  },
+  {
+    "id": "line7",
+    "name": "7호선",
+    "color": "#747F00",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "장암",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "도봉산",
+        "cumulativeKm": 1.4,
+        "travelTimeSec": 270
+      },
+      {
+        "stationName": "수락산",
+        "cumulativeKm": 3,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "마들",
+        "cumulativeKm": 4.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "노원",
+        "cumulativeKm": 5.6,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "중계",
+        "cumulativeKm": 6.7,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "하계",
+        "cumulativeKm": 7.7,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "공릉",
+        "cumulativeKm": 9,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "태릉입구",
+        "cumulativeKm": 9.8,
+        "travelTimeSec": 60
+      },
+      {
+        "stationName": "먹골",
+        "cumulativeKm": 10.7,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "중화",
+        "cumulativeKm": 11.6,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "상봉",
+        "cumulativeKm": 12.6,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "면목",
+        "cumulativeKm": 13.4,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "사가정",
+        "cumulativeKm": 14.3,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "용마산",
+        "cumulativeKm": 15.1,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "중곡",
+        "cumulativeKm": 16,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "군자",
+        "cumulativeKm": 17.1,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "어린이대공원",
+        "cumulativeKm": 18.2,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "건대입구",
+        "cumulativeKm": 19,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "자양",
+        "cumulativeKm": 20,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "청담",
+        "cumulativeKm": 22,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "강남구청",
+        "cumulativeKm": 23.1,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "학동",
+        "cumulativeKm": 24,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "논현",
+        "cumulativeKm": 25,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "반포",
+        "cumulativeKm": 25.9,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "고속터미널",
+        "cumulativeKm": 26.8,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "내방",
+        "cumulativeKm": 29,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "이수",
+        "cumulativeKm": 30,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "남성",
+        "cumulativeKm": 31,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "숭실대입구",
+        "cumulativeKm": 33,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "상도",
+        "cumulativeKm": 33.9,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "장승배기",
+        "cumulativeKm": 34.8,
+        "travelTimeSec": 150
+      },
+      {
+        "stationName": "신대방삼거리",
+        "cumulativeKm": 36,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "보라매",
+        "cumulativeKm": 36.8,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "신풍",
+        "cumulativeKm": 37.7,
+        "travelTimeSec": 140
+      },
+      {
+        "stationName": "대림",
+        "cumulativeKm": 39.1,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "남구로",
+        "cumulativeKm": 40.2,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "가산디지털단지",
+        "cumulativeKm": 41,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "철산",
+        "cumulativeKm": 42.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "광명사거리",
+        "cumulativeKm": 43.7,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "천왕",
+        "cumulativeKm": 45.4,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "온수",
+        "cumulativeKm": 46.9,
+        "travelTimeSec": 140
+      }
+    ],
+    "notes": "서울교통공사 관할 구간(도봉산~온수)만 포함. 온수 이후 부천/인천 연장 구간은 별도 운영사 관할로 데이터 미포함."
+  },
+  {
+    "id": "line8",
+    "name": "8호선",
+    "color": "#E6186C",
+    "operator": "서울교통공사",
+    "dataConfidence": "official",
+    "firstTrain": "05:30",
+    "lastTrain": "24:30",
+    "mainStops": [
+      {
+        "stationName": "암사역사공원",
+        "cumulativeKm": 0,
+        "travelTimeSec": 0
+      },
+      {
+        "stationName": "암사",
+        "cumulativeKm": 1.1,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "천호",
+        "cumulativeKm": 2.4,
+        "travelTimeSec": 90
+      },
+      {
+        "stationName": "강동구청",
+        "cumulativeKm": 3.3,
+        "travelTimeSec": 80
+      },
+      {
+        "stationName": "몽촌토성",
+        "cumulativeKm": 4.9,
+        "travelTimeSec": 120
+      },
+      {
+        "stationName": "잠실",
+        "cumulativeKm": 5.7,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "석촌",
+        "cumulativeKm": 6.9,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "송파",
+        "cumulativeKm": 7.8,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "가락시장",
+        "cumulativeKm": 8.6,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "문정",
+        "cumulativeKm": 9.5,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "장지",
+        "cumulativeKm": 10.4,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "복정",
+        "cumulativeKm": 11.3,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "남위례",
+        "cumulativeKm": 12.8,
+        "travelTimeSec": 110
+      },
+      {
+        "stationName": "산성",
+        "cumulativeKm": 14,
+        "travelTimeSec": 100
+      },
+      {
+        "stationName": "남한산성입구",
+        "cumulativeKm": 15.3,
+        "travelTimeSec": 130
+      },
+      {
+        "stationName": "단대오거리",
+        "cumulativeKm": 16.1,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "신흥",
+        "cumulativeKm": 16.9,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "수진",
+        "cumulativeKm": 17.8,
+        "travelTimeSec": 70
+      },
+      {
+        "stationName": "모란",
+        "cumulativeKm": 18.8,
+        "travelTimeSec": 90
+      }
+    ],
+    "notes": "서울교통공사 관할 구간(암사역사공원~모란)만 포함. 별내선의 암사역사공원~별내 구간은 별내선㈜ 관할로 데이터 미포함."
+  }
+]
