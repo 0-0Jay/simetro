@@ -4,6 +4,7 @@ import { buildMapData } from './mapData'
 import { computeTrainScreenPositions } from './trainPositions'
 import { usePanZoom } from './usePanZoom'
 import { StationPopover } from './StationPopover'
+import { LineLegend } from './LineLegend'
 import { MAP_VIEWBOX, getStationCoord } from '../../data/coordinates'
 import { SUBWAY_LINES } from '../../data/lines'
 
@@ -36,6 +37,7 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
   const tracks = useSimulationStore((s) => s.tracks)
   const trainsByTrack = useSimulationStore((s) => s.trainsByTrack)
   const [selectedStation, setSelectedStation] = useState<string | null>(null)
+  const [legendOpen, setLegendOpen] = useState(false)
 
   const { segments, stations } = useMemo(() => buildMapData(), [])
   const trains = useMemo(() => computeTrainScreenPositions(tracks, trainsByTrack), [tracks, trainsByTrack])
@@ -222,6 +224,16 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
           onClose={() => setSelectedStation(null)}
         />
       )}
+
+      <button
+        type="button"
+        onClick={() => setLegendOpen(true)}
+        className="absolute bottom-3 right-3 z-10 rounded-full border border-white/15 bg-[#0d1117]/90 px-3 py-2 text-xs font-medium text-white shadow-lg"
+      >
+        노선 범례
+      </button>
+
+      {legendOpen && <LineLegend onClose={() => setLegendOpen(false)} />}
     </div>
   )
 }
