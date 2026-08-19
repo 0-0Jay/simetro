@@ -62,15 +62,34 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
 
   const selected = stations.find((st) => st.name === selectedStation)
 
+  // 선택된 역의 지도 좌표(map)를 실제 화면 픽셀 좌표로 투영한다.
+  // 순서: (1) 우리 <g> 팬/줌 transform 적용 -> viewBox 좌표계 위 점, (2) svg의 preserveAspectRatio(slice)가
+  // viewBox 중심을 항상 화면 중심에 놓는다는 성질을 이용해 화면 픽셀로 변환.
+  const selectedScreenPos = (() => {
+    if (!selected || !svgRef.current) return null
+    const rect = svgRef.current.getBoundingClientRect()
+    if (rect.width === 0 || rect.height === 0) return null
+    const browserScale = Math.max(rect.width / MAP_VIEWBOX.width, rect.height / MAP_VIEWBOX.height)
+    const centerVX = MAP_VIEWBOX.minX + MAP_VIEWBOX.width / 2
+    const centerVY = MAP_VIEWBOX.minY + MAP_VIEWBOX.height / 2
+    const px = selected.x * transform.scale + transform.tx
+    const py = selected.y * transform.scale + transform.ty
+    return {
+      x: rect.width / 2 + (px - centerVX) * browserScale,
+      y: rect.height / 2 + (py - centerVY) * browserScale,
+    }
+  })()
+
   return (
-    <svg
-      ref={svgRef}
-      viewBox={`${MAP_VIEWBOX.minX} ${MAP_VIEWBOX.minY} ${MAP_VIEWBOX.width} ${MAP_VIEWBOX.height}`}
-      preserveAspectRatio="xMidYMid slice"
-      className="h-full w-full touch-none select-none bg-[var(--bg)]"
-      onClick={() => setSelectedStation(null)}
-      {...handlers}
-    >
+    <div className="relative h-full w-full">
+      <svg
+        ref={svgRef}
+        viewBox={`${MAP_VIEWBOX.minX} ${MAP_VIEWBOX.minY} ${MAP_VIEWBOX.width} ${MAP_VIEWBOX.height}`}
+        preserveAspectRatio="xMidYMid slice"
+        className="h-full w-full touch-none select-none bg-[var(--bg)]"
+        onClick={() => setSelectedStation(null)}
+        {...handlers}
+      >
       <g transform={`translate(${transform.tx} ${transform.ty}) scale(${transform.scale})`}>
         {/* 노선 (그림자 언더레이 + 실제 색 라인) */}
         {segments.map((seg) => (
@@ -191,18 +210,18 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
         {riderPoint && (
           <circle cx={riderPoint.x} cy={riderPoint.y} r={7} fill="#ff3b30" stroke="#ffffff" strokeWidth={2} />
         )}
-
-        {selected && (
-          <StationPopover
-            x={selected.x}
-            y={selected.y}
-            scale={transform.scale}
-            stationName={selected.name}
-            lines={selected.lineIds.map((id) => ({ id, ...(LINE_INFO_BY_ID.get(id) ?? { name: id, color: '#888' }) }))}
-            onClose={() => setSelectedStation(null)}
-          />
-        )}
       </g>
-    </svg>
+      </svg>
+
+      {selected && selectedScreenPos && (
+        <StationPopover
+          x={selectedScreenPos.x}
+          y={selectedScreenPos.y}
+          stationName={selected.name}
+          lines={selected.lineIds.map((id) => ({ id, ...(LINE_INFO_BY_ID.get(id) ?? { name: id, color: '#888' }) }))}
+          onClose={() => setSelectedStation(null)}
+        />
+      )}
+    </div>
   )
 }
