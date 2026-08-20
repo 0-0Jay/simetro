@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { buildTracks, type Track } from '../simulation/tracks'
 import type { Train } from '../simulation/train'
-import { initializeTrainsForTrack, tickTrack } from '../simulation/engine'
+import { initializeTrainsForTrack, tickTrack, MIN_GAP_STATIONS } from '../simulation/engine'
 import { mulberry32 } from '../utils/rng'
 
 /** 게임 시각은 실시간 대비 20배속으로 흐른다(체감 1초 = 게임 20초). */
@@ -26,7 +26,7 @@ export interface SimulationState {
 function initializeAllTrains(rng: () => number): Record<string, Train[]> {
   const result: Record<string, Train[]> = {}
   for (const track of TRACKS) {
-    const phase = Math.floor(rng() * 3)
+    const phase = Math.floor(rng() * MIN_GAP_STATIONS)
     result[track.id] = initializeTrainsForTrack(track, phase, 'init')
   }
   return result

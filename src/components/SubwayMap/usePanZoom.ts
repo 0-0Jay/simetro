@@ -1,4 +1,4 @@
-import { useRef, useState, type RefObject } from 'react'
+import { useLayoutEffect, useRef, useState, type RefObject } from 'react'
 
 export interface PanZoomTransform {
   scale: number
@@ -103,6 +103,19 @@ export function usePanZoom(
         ty: viewBox.minY + viewBox.height / 2 - followPoint.y * transform.scale,
       }
     : transform
+
+  // 추적 중엔 매 렌더의 결과를 기억해뒀다가, 추적이 꺼지는 순간 그 마지막 위치를 실제 상태로 확정한다.
+  // 이렇게 안 하면 추적이 꺼졌을 때 추적을 켜기 전의(오래된) tx/ty로 화면이 튕겨 돌아간다.
+  const lastFollowedTransform = useRef(effectiveTransform)
+  const wasFollowing = useRef(!!followPoint)
+  if (followPoint) lastFollowedTransform.current = effectiveTransform
+
+  useLayoutEffect(() => {
+    if (wasFollowing.current && !followPoint) {
+      setTransform(lastFollowedTransform.current)
+    }
+    wasFollowing.current = !!followPoint
+  }, [followPoint])
 
   return {
     transform: effectiveTransform,

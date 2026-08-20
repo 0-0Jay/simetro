@@ -35,7 +35,7 @@ export function MissionTab() {
         <div className="flex h-[70%] w-full flex-col">
           <LineLabelCard player={player} />
           <div className="min-h-0 flex-1">
-            <SubwayMap rider={rider} followRider waypointMarkers={waypointMarkers} />
+            <SubwayMap rider={rider} waypointMarkers={waypointMarkers} />
           </div>
         </div>
         <div className="h-[30%] w-full">

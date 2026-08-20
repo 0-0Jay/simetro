@@ -113,8 +113,11 @@ export function getUpcomingTrains(
       }
     }
   }
-  result.sort((a, b) => a.etaSec - b.etaSec)
-  return result.slice(0, limit)
+  // "0분 00초"로 표시될 만큼 다 온(또는 정체로 그 자리에 계속 머무르는) 열차는 더 이상 "다가오는 열차"가 아니므로 목록에서 뺀다.
+  // 안 그러면 정체 등으로 한 열차가 도착 지점 근처에 멈춰버릴 때 그 자리에 영원히 박힌 "유령 열차"로 보이게 된다.
+  const arriving = result.filter((r) => r.etaSec >= 1)
+  arriving.sort((a, b) => a.etaSec - b.etaSec)
+  return arriving.slice(0, limit)
 }
 
 /**

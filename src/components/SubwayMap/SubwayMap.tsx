@@ -28,16 +28,16 @@ export interface SubwayMapRider {
 
 interface SubwayMapProps {
   rider?: SubwayMapRider | null
-  followRider?: boolean
   waypointMarkers?: { name: string; status: 'done' | 'next' | 'pending' }[]
 }
 
-export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProps) {
+export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const tracks = useSimulationStore((s) => s.tracks)
   const trainsByTrack = useSimulationStore((s) => s.trainsByTrack)
   const [selectedStation, setSelectedStation] = useState<string | null>(null)
   const [legendOpen, setLegendOpen] = useState(false)
+  const [focusEnabled, setFocusEnabled] = useState(true)
 
   const { segments, stations } = useMemo(() => buildMapData(), [])
   const trains = useMemo(() => computeTrainScreenPositions(tracks, trainsByTrack), [tracks, trainsByTrack])
@@ -59,7 +59,7 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
     svgRef,
     MAP_VIEWBOX,
     { scale: 1, tx: 0, ty: 0 },
-    followRider ? riderPoint : null,
+    rider && focusEnabled ? riderPoint : null,
   )
 
   const selected = stations.find((st) => st.name === selectedStation)
@@ -182,23 +182,23 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
               <circle
                 cx={coord[0]}
                 cy={coord[1]}
-                r={12}
+                r={24}
                 fill="none"
                 stroke={WAYPOINT_STATUS_COLOR[wp.status]}
-                strokeWidth={isNext ? 3.5 : 2}
-                strokeDasharray={wp.status === 'pending' ? '3 2' : undefined}
+                strokeWidth={isNext ? 7 : 4}
+                strokeDasharray={wp.status === 'pending' ? '6 4' : undefined}
                 className={isNext ? 'waypoint-ring-next' : 'waypoint-ring-soft'}
               />
               <circle
-                cx={coord[0] + 9}
-                cy={coord[1] - 9}
-                r={isNext ? 7.5 : 6}
+                cx={coord[0] + 18}
+                cy={coord[1] - 18}
+                r={isNext ? 15 : 12}
                 fill={WAYPOINT_STATUS_COLOR[wp.status]}
                 stroke="#0d1117"
-                strokeWidth={1}
+                strokeWidth={2}
                 className={isNext ? 'waypoint-badge-next' : undefined}
               />
-              <text x={coord[0] + 9} y={coord[1] - 6} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#ffffff">
+              <text x={coord[0] + 18} y={coord[1] - 12} textAnchor="middle" fontSize={15} fontWeight={700} fill="#ffffff">
                 {i + 1}
               </text>
             </g>
@@ -242,6 +242,22 @@ export function SubwayMap({ rider, followRider, waypointMarkers }: SubwayMapProp
       >
         노선 범례
       </button>
+
+      {rider && (
+        <button
+          type="button"
+          onClick={() => setFocusEnabled((v) => !v)}
+          className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-medium shadow-lg"
+          style={{
+            borderColor: focusEnabled ? '#ff9500' : 'rgba(255,255,255,0.15)',
+            background: focusEnabled ? '#ff9500' : 'rgba(13,17,23,0.9)',
+            color: '#ffffff',
+          }}
+        >
+          <span className="h-2 w-2 rounded-full" style={{ background: focusEnabled ? '#ffffff' : '#8b949e' }} />
+          포커스 {focusEnabled ? 'ON' : 'OFF'}
+        </button>
+      )}
 
       {legendOpen && <LineLegend onClose={() => setLegendOpen(false)} />}
     </div>

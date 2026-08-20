@@ -3,8 +3,8 @@ import type { Train } from './train'
 import { trainPosition } from './train'
 import { rollDelay } from './delayEvents'
 
-/** 열차 사이에 반드시 2개 역이 있어야 하므로, station-index 기준 최소 간격은 3 (역[열차]--역--역--역[열차]) */
-export const MIN_GAP_STATIONS = 3
+/** 열차 사이에 반드시 1개 역이 있어야 하므로, station-index 기준 최소 간격은 2 (역[열차]--역--역[열차]) */
+export const MIN_GAP_STATIONS = 2
 const EPS = 1e-6
 
 /** 트랙 전체(처음~끝)를 3정거장 간격으로 가득 채워 초기 배치한다. phase(0~2)만 랜덤. */

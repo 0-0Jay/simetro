@@ -199,28 +199,24 @@ export const useMissionStore = create<MissionState>()(
           if (!track) {
             // 이론상 발생하지 않음(트랙 목록은 고정)
           } else if (!train) {
-            // 탑승 중이던 열차가 종점 도착으로 소멸 -> 종점에서 강제 하차
-            const segCount = track.segmentSec.length
-            const crossed = stationsCrossedThisTick(player.lastSegmentIndex, segCount, track)
-            for (const idx of crossed) {
-              const name = track.stops[idx]?.name
-              if (name && name === mission.waypoints[nextWaypointIdx]) nextWaypointIdx++
-            }
+            // 탑승 중이던 열차가 종점 도착으로 소멸 -> 종점에서 강제 하차 (경유는 "그 역에서 실제로 내렸을 때"만 인정)
             const terminusName = track.stops[track.stops.length - 1].name
+            if (terminusName === mission.waypoints[nextWaypointIdx]) nextWaypointIdx++
             nextPlayer = { mode: 'waiting', station: terminusName }
             if (terminusName === mission.waypoints[mission.waypoints.length - 1] && nextWaypointIdx >= mission.waypoints.length) {
               completedNow = true
             }
           } else {
-            const crossed = stationsCrossedThisTick(player.lastSegmentIndex, train.segmentIndex, track)
             let alightedAt: string | null = null
-            for (const idx of crossed) {
-              const name = track.stops[idx]?.name
-              if (!name) continue
-              if (name === mission.waypoints[nextWaypointIdx]) nextWaypointIdx++
-              if (player.alightArmed && alightedAt === null) alightedAt = name
+            if (player.alightArmed) {
+              const crossed = stationsCrossedThisTick(player.lastSegmentIndex, train.segmentIndex, track)
+              for (const idx of crossed) {
+                const name = track.stops[idx]?.name
+                if (name) { alightedAt = name; break }
+              }
             }
             if (alightedAt !== null) {
+              if (alightedAt === mission.waypoints[nextWaypointIdx]) nextWaypointIdx++
               nextPlayer = { mode: 'waiting', station: alightedAt }
               if (alightedAt === mission.waypoints[mission.waypoints.length - 1] && nextWaypointIdx >= mission.waypoints.length) {
                 completedNow = true

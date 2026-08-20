@@ -1,34 +1,5 @@
 import { SUBWAY_LINES } from '../../data/lines'
-
-/** 실제 서울/수도권 지하철 노선도 범례 관행을 따라, 숫자 노선은 번호, 그 외는 짧은 약칭 배지를 쓴다. */
-const BADGE_LABEL: Record<string, string> = {
-  line1: '1',
-  line2: '2',
-  line3: '3',
-  line4: '4',
-  line5: '5',
-  line6: '6',
-  line7: '7',
-  line8: '8',
-  line9: '9',
-  ui: '우이',
-  sinlim: '신림',
-  gyeonguijungang: '경의',
-  suinbundang: '수인',
-  gyeongchun: '경춘',
-  airport: '공항',
-  'gtxa-north': 'GTX',
-  'gtxa-south': 'GTX',
-  incheon1: '인천1',
-  incheon2: '인천2',
-  sinbundang: '신분',
-  gyeonggang: '경강',
-  seohae: '서해',
-  uijeongbuLrt: '의정부',
-  yonginEverline: '용인',
-  incheonMaglev: '자기\n부상',
-  gimpoGoldline: '김포',
-}
+import { LINE_BADGE_LABEL } from '../../data/lineBadges'
 
 interface LineLegendProps {
   onClose: () => void
@@ -54,7 +25,7 @@ export function LineLegend({ onClose }: LineLegendProps) {
                 className="flex h-7 w-7 shrink-0 items-center justify-center whitespace-pre-line rounded-full text-center text-[9px] font-bold leading-tight"
                 style={{ background: line.color, color: '#ffffff' }}
               >
-                {BADGE_LABEL[line.id] ?? line.name.slice(0, 2)}
+                {LINE_BADGE_LABEL[line.id] ?? line.name.slice(0, 2)}
               </span>
               <span className="text-xs leading-tight text-gray-200">{line.name}</span>
             </div>

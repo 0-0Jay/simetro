@@ -48,11 +48,11 @@ body {
 @keyframes waypoint-pulse-next {
   0%,
   100% {
-    r: 12;
+    r: 24;
     opacity: 1;
   }
   50% {
-    r: 18;
+    r: 36;
     opacity: 0.3;
   }
 }

@@ -1,5 +1,23 @@
 import { mulberry32, hashStringToSeed } from '../utils/rng'
 import { findWaypointPath, getAllStationNames } from './routeGraph'
+import { SUBWAY_LINES } from '../data/lines'
+
+/**
+ * 나머지 전체 노선망과 환승역을 하나도 공유하지 않아 그래프상 완전히 고립된 노선.
+ * (실제로는 1호선 데이터가 의정부 이북 구간을 포함하지 않아 회룡 환승이 빠진 데이터 공백)
+ * 이 역들이 미션 출발/경유/도착지로 뽑히면 다른 어떤 역과도 경로가 이어지지 않으므로 미션 풀에서 제외한다.
+ */
+const DISCONNECTED_LINE_IDS = new Set(['uijeongbuLrt'])
+
+function buildMissionStationPool(): string[] {
+  const excluded = new Set<string>()
+  for (const line of SUBWAY_LINES) {
+    if (!DISCONNECTED_LINE_IDS.has(line.id)) continue
+    for (const stop of line.mainStops) excluded.add(stop.stationName)
+    for (const branch of line.branches ?? []) for (const stop of branch.stops) excluded.add(stop.stationName)
+  }
+  return getAllStationNames().filter((name) => !excluded.has(name))
+}
 
 export interface Mission {
   id: string
@@ -71,7 +89,7 @@ function generateOneMission(rng: () => number, pool: string[], difficulty: 1 | 2
 /** dateKey(YYYY-MM-DD) 기준으로 결정적인 오늘의 미션 3개를 생성한다. */
 export function generateDailyMissions(dateKey: string): Mission[] {
   const rng = mulberry32(hashStringToSeed(dateKey))
-  const pool = getAllStationNames()
+  const pool = buildMissionStationPool()
   return [1, 2, 3].map((d) => generateOneMission(rng, pool, d as 1 | 2 | 3, dateKey))
 }
 
