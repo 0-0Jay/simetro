@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Simetro: an offline, single-player PWA subway simulator for the Seoul/수도권 metropolitan rail network. No backend/DB — everything (train simulation, missions, settings) runs client-side. Real subway time is compressed 1:20 into wall-clock time (`TIME_COMPRESSION_RATE` in `src/store/simulationStore.ts`).
+Simetro: an offline, single-player PWA subway simulator for the Seoul/수도권 metropolitan rail network. No backend/DB — everything (train simulation, missions, settings) runs client-side. Real subway time is compressed 1:30 into wall-clock time while the app is open (`TIME_COMPRESSION_RATE` in `src/store/simulationStore.ts`); while closed, the clock keeps advancing 1:1 with real elapsed time (see `simulationStore` below), so the in-game clock never simply freezes.
 
 ## Commands
 
@@ -41,7 +41,7 @@ There is no headway/timetable concept. Trains maintain a strict minimum gap of `
 
 ### State (Zustand stores in `src/store/`)
 
-- **`simulationStore`** — the live train sim (`tracks`, `trainsByTrack`, `gameSeconds`). Deliberately **not persisted**: reloading the app re-randomizes train placement, matching the original design intent.
+- **`simulationStore`** — the live train sim (`tracks`, `trainsByTrack`, `gameSeconds`). `trainsByTrack` itself is never persisted (reloading always re-randomizes exact train placement) — but `gameSeconds` is: `useOfflineClockPersistence` saves `{gameSeconds, savedAtMs}` to `localStorage` (`simetro-clock` key) on tab-hide/pagehide/a 30s timer, and on next launch `computeInitialState` advances `gameSeconds` by the real elapsed time since `savedAtMs` — **1:1, not through `TIME_COMPRESSION_RATE`** — so the clock keeps flowing while the app is closed instead of resetting to first-train time. If the catch-up lands past `LAST_TRAIN_CUTOFF_SECONDS`, trains start empty (matching the real overnight gap) instead of a fresh full fleet.
 - **`missionStore`** — persists only `dateKey` and `missionHistory`; `todayMissions`/`activeMission` are derived/ephemeral. Missions are generated deterministically per day via `mulberry32(hashStringToSeed(dateKey))` in `missionGenerator.ts`, using `routeGraph.ts`'s Dijkstra (with a transfer penalty) purely to pick waypoints that hit a difficulty-appropriate total time — that graph is **not** used at mission-execution time.
 - **`settingsStore`** — persists `themeColor`; `deriveThemePalette` (in `src/utils/color.ts`) derives the rest of the CSS palette (panel/border/text) from it for guaranteed contrast. `resetAll` wipes `localStorage` and reloads.
 - Both `advance()` (simulationStore) and `tick()` (missionStore) are driven every animation frame from the single `useGameClockTicker` hook, mounted once in `App.tsx`.
@@ -56,4 +56,4 @@ Single `SubwayMap` component shared by the Home tab (free pan/zoom) and Mission 
 
 ### Layout shell
 
-`App.tsx`: fixed `Header` (5%, real wall-clock time — independent of the compressed `gameSeconds`) + tab content (90%) + `TabBar` (5%), three tabs (Home/Mission/Settings) switched via local `useState`, no router.
+`App.tsx`: fixed `Header` (shows the compressed in-game clock, 12h format, plus the latest delay-news headline) + tab content (`flex-1`) + `TabBar`, three tabs (Home/Mission/Settings) switched via local `useState`, no router.

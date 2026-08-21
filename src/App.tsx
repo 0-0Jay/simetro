@@ -5,10 +5,12 @@ import { HomeTab } from './tabs/HomeTab'
 import { MissionTab } from './tabs/MissionTab'
 import { SettingsTab } from './tabs/SettingsTab'
 import { useGameClockTicker } from './hooks/useGameClockTicker'
+import { useOfflineClockPersistence } from './hooks/useOfflineClockPersistence'
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabId>('home')
   useGameClockTicker()
+  useOfflineClockPersistence()
 
   return (
     <>
