@@ -10,13 +10,15 @@ export function Header() {
 
   return (
     <>
-      <header className="flex min-h-11 shrink-0 flex-col items-center justify-center gap-0.5 border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 pt-[env(safe-area-inset-top)] pb-1">
-        <span className="font-digital text-sm text-[var(--text-primary)] sm:text-lg">{formatGameClock12h(gameSeconds)}</span>
+      <header className="flex min-h-11 shrink-0 items-center gap-3 border-b border-[var(--border)] bg-[var(--bg-panel)] px-3 pt-[env(safe-area-inset-top)] pb-1">
+        <span className="font-digital shrink-0 text-lg font-bold text-[var(--text-primary)] sm:text-xl">
+          {formatGameClock12h(gameSeconds)}
+        </span>
         {latestNews && (
           <button
             type="button"
             onClick={() => setNewsOpen(true)}
-            className="flex max-w-full items-center gap-1.5 text-[11px] text-[var(--text-secondary)]"
+            className="flex min-w-0 flex-1 items-center justify-end gap-1.5 text-[11px] text-[var(--text-secondary)]"
           >
             <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: latestNews.color }} />
             <span className="truncate">{formatNewsLine(latestNews)}</span>
