@@ -2,10 +2,10 @@ import { useEffect, useRef } from 'react'
 import { useMissionStore, type ArmedBoard } from '../store/missionStore'
 import { useSimulationStore, formatGameClock, LAST_TRAIN_CUTOFF_SECONDS } from '../store/simulationStore'
 import { useSettingsStore } from '../store/settingsStore'
-import { getUpcomingTrains, directionLabelFor, type UpcomingTrain } from '../simulation/missionPlayer'
+import { getUpcomingTrains, directionLabelFor, isBlockedByAhead, type UpcomingTrain } from '../simulation/missionPlayer'
 import { formatDuration } from '../utils/time'
 import { playBoardSound, playAlightSound, playCompleteSound, playDelaySound } from '../utils/sound'
-import { LINE_BADGE_LABEL } from '../data/lineBadges'
+import { LineLabelCard } from './LineLabelCard'
 import type { Track } from '../simulation/tracks'
 import type { Train } from '../simulation/train'
 
@@ -61,7 +61,7 @@ export function MissionStatusPanel() {
   }, [active, soundEnabled, tracks, trainsByTrack])
 
   if (!active) return null
-  const { mission, player } = active
+  const { player } = active
 
   const elapsedSec =
     active.completedAtGameSeconds !== null
@@ -92,7 +92,7 @@ export function MissionStatusPanel() {
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-y-auto border-t border-[var(--border)] bg-[var(--bg-panel)] p-3">
       <div className="flex items-start justify-between gap-2">
-        <RouteStrip waypoints={mission.waypoints} nextWaypointIdx={active.nextWaypointIdx} tracks={tracks} />
+        <LineLabelCard player={player} />
         <div className="flex shrink-0 items-center gap-3">
           <p className="font-digital text-base text-[var(--text-primary)]">{formatDuration(elapsedSec)}</p>
           <button
@@ -127,53 +127,6 @@ export function MissionStatusPanel() {
           onUnarmAlight={unarmAlight}
         />
       )}
-    </div>
-  )
-}
-
-/** 출발~도착 전체 경로를 역 이름 + 그 역을 지나는 노선 배지로 보여주고, 진행 상태를 색으로 구분한다. */
-function RouteStrip({ waypoints, nextWaypointIdx, tracks }: { waypoints: string[]; nextWaypointIdx: number; tracks: Track[] }) {
-  const linesAt = (name: string) => {
-    const seen = new Map<string, { id: string; color: string }>()
-    for (const t of tracks) {
-      if (!seen.has(t.lineId) && t.stops.some((s) => s.name === name)) {
-        seen.set(t.lineId, { id: t.lineId, color: t.color })
-      }
-    }
-    return [...seen.values()]
-  }
-
-  return (
-    <div className="flex flex-1 flex-wrap items-start gap-x-1 gap-y-1.5 text-sm">
-      {waypoints.map((name, i) => {
-        const status = i < nextWaypointIdx ? 'done' : i === nextWaypointIdx ? 'next' : 'pending'
-        return (
-          <div key={i} className="flex items-start gap-1">
-            {i > 0 && <span className="mt-1 text-[var(--text-secondary)]">→</span>}
-            <div className="flex flex-col items-center gap-0.5">
-              <span
-                className={i === 0 || i === waypoints.length - 1 ? 'font-bold' : 'font-medium'}
-                style={{
-                  color: status === 'next' ? '#ff9500' : status === 'done' ? '#2ea043' : 'var(--text-primary)',
-                }}
-              >
-                {name}
-              </span>
-              <div className="flex gap-0.5">
-                {linesAt(name).map((l) => (
-                  <span
-                    key={l.id}
-                    className="flex h-5 w-5 shrink-0 items-center justify-center whitespace-pre-line rounded-full text-center text-[7px] font-bold leading-none text-white"
-                    style={{ background: l.color }}
-                  >
-                    {LINE_BADGE_LABEL[l.id] ?? ''}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        )
-      })}
     </div>
   )
 }
@@ -241,6 +194,7 @@ function WaitingPanel({
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: isArmed ? '#ffffff' : tr.color }} />
               {tr.directionLabel}
               {tr.trainId === null && <span className="text-[10px] opacity-80">(신규 투입)</span>}
+              {tr.blocked && <span className="text-[10px] opacity-80">(정체 — 지연될 수 있음)</span>}
             </span>
             <span className="font-digital text-xs">{isArmed ? '탑승 예약됨' : `${formatDuration(tr.etaSec)} 후 도착`}</span>
           </button>
@@ -277,6 +231,9 @@ function RidingPanel({
   const segLen = track.segmentSec[train.segmentIndex] ?? 0
   const nextStation = track.stops[Math.min(train.segmentIndex + 1, track.stops.length - 1)]
   const remainingSec = Math.max(0, segLen - train.segmentElapsedSec) + train.delayRemainingSec
+  // 자기 자신의 지연은 없지만 앞차와의 최소 간격 제한에 막혀 사실상 못 움직이는 상태 — 이 경우 위 remainingSec은
+  // "막힘이 안 풀렸을 때"를 가정한 부정확한(멈춰있는 것처럼 보이는) 값이라 그대로 보여주지 않는다.
+  const blocked = !train.activeDelay && isBlockedByAhead(train, trainsByTrack[trackId] ?? [], track.segmentSec)
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-2">
@@ -284,11 +241,16 @@ function RidingPanel({
         <p className="text-xs text-[var(--text-secondary)]">현재 탑승 중</p>
         <p className="text-base font-medium text-[var(--text-primary)]">{directionLabelFor(track)}</p>
         <p className="mt-1 text-sm text-[var(--text-secondary)]">
-          다음 역 {nextStation?.name} · {formatDuration(remainingSec)} 후 도착
+          다음 역 {nextStation?.name} · {blocked ? '앞차 통행 대기 중' : `${formatDuration(remainingSec)} 후 도착`}
         </p>
         {train.activeDelay && (
           <p className="mt-1 text-sm" style={{ color: '#ff9500' }}>
             {train.activeDelay.label} (지연 중)
+          </p>
+        )}
+        {blocked && (
+          <p className="mt-1 text-sm" style={{ color: '#5ac8fa' }}>
+            혼잡으로 앞차 뒤에서 서행 중 — 앞차가 빠지면 곧 다시 출발합니다
           </p>
         )}
       </div>

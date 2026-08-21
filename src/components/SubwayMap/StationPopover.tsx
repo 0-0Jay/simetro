@@ -52,6 +52,7 @@ export function StationPopover({ x, y, stationName, lines, upcomingTrains, onClo
               <span className="flex items-center gap-1.5 truncate">
                 <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: tr.color }} />
                 <span className="truncate text-gray-200">{tr.directionLabel}</span>
+                {tr.blocked && <span className="shrink-0 text-[10px] text-gray-500">(정체)</span>}
               </span>
               <span className="font-digital shrink-0 text-gray-400">{formatDuration(tr.etaSec)}</span>
             </div>

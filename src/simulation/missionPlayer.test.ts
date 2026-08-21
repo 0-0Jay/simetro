@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { stationIndexInTrack, directionLabelFor, trainEtaToStation, getUpcomingTrains, stationsCrossedThisTick } from './missionPlayer'
+import { stationIndexInTrack, directionLabelFor, trainEtaToStation, getUpcomingTrains, stationsCrossedThisTick, isBlockedByAhead } from './missionPlayer'
 import { MIN_GAP_STATIONS } from './engine'
 import type { Track } from './tracks'
 import type { Train } from './train'
@@ -132,6 +132,86 @@ describe('getUpcomingTrains', () => {
     const trains = Array.from({ length: 5 }, (_, i) => makeTrain({ id: `t${i}`, segmentIndex: 1, segmentElapsedSec: i }))
     const result = getUpcomingTrains('종각', [track], { [track.id]: trains }, 2)
     expect(result).toHaveLength(2)
+  })
+})
+
+describe('isBlockedByAhead', () => {
+  it('앞차가 최소 간격으로 붙어있어도 그 앞차가 실제로 지연 중이 아니면 막힌 게 아니다(정상적인 배차 간격일 뿐)', () => {
+    const track = makeTrack()
+    const ahead = makeTrain({ id: 'ahead', segmentIndex: 3, segmentElapsedSec: 0 }) // delayRemainingSec: 0(지연 없음)
+    const me = makeTrain({ id: 'me', segmentIndex: 1, segmentElapsedSec: 0 })
+    expect(isBlockedByAhead(me, [ahead, me], track.segmentSec)).toBe(false)
+  })
+
+  it('바로 앞차가 최소 간격으로 붙어있고 실제로 지연 중이면 막힌 것으로 판정한다', () => {
+    const track = makeTrack()
+    const ahead = makeTrain({ id: 'ahead', segmentIndex: 3, segmentElapsedSec: 0, delayRemainingSec: 30 })
+    const me = makeTrain({ id: 'me', segmentIndex: 1, segmentElapsedSec: 0 })
+    expect(isBlockedByAhead(me, [ahead, me], track.segmentSec)).toBe(true)
+  })
+
+  it('지연 중인 열차가 앞쪽 사슬 너머에 있어도, 그 사이가 전부 최소 간격으로 이어져 있으면 막힌 것으로 전파된다', () => {
+    const track = makeTrack()
+    const farAhead = makeTrain({ id: 'far', segmentIndex: 4, segmentElapsedSec: 0, delayRemainingSec: 30 })
+    const mid = makeTrain({ id: 'mid', segmentIndex: 2, segmentElapsedSec: 0 }) // far와 정확히 MIN_GAP만큼 붙음, 자기 지연은 없음
+    const me = makeTrain({ id: 'me', segmentIndex: 0, segmentElapsedSec: 0 }) // mid와 정확히 MIN_GAP만큼 붙음
+    expect(isBlockedByAhead(me, [farAhead, mid, me], track.segmentSec)).toBe(true)
+  })
+
+  it('중간에 여유(간격 벌어짐)가 있으면 그 너머의 지연은 전파되지 않는다', () => {
+    const track = makeTrack()
+    const farAhead = makeTrain({ id: 'far', segmentIndex: 4, segmentElapsedSec: 0, delayRemainingSec: 30 })
+    const mid = makeTrain({ id: 'mid', segmentIndex: 1, segmentElapsedSec: 0 }) // far와 간격 3(여유 있음) -> 사슬 끊김. mid 자신은 지연 없음.
+    const me = makeTrain({ id: 'me', segmentIndex: 0, segmentElapsedSec: 45 }) // mid와 최소 간격 이내로 붙어있지만, mid가 안 막혔으므로 나도 안 막혀야 한다.
+    expect(isBlockedByAhead(me, [farAhead, mid, me], track.segmentSec)).toBe(false)
+  })
+
+  it('앞차와 간격이 여유 있으면(최소 간격 초과) 막힌 게 아니다', () => {
+    const track = makeTrack()
+    const ahead = makeTrain({ id: 'ahead', segmentIndex: 4, segmentElapsedSec: 0, delayRemainingSec: 30 })
+    const me = makeTrain({ id: 'me', segmentIndex: 1, segmentElapsedSec: 0 })
+    expect(isBlockedByAhead(me, [ahead, me], track.segmentSec)).toBe(false)
+  })
+
+  it('자기 자신이 지연 중이면(이미 별도 표시가 있으므로) 막힌 것으로 치지 않는다', () => {
+    const track = makeTrack()
+    const ahead = makeTrain({ id: 'ahead', segmentIndex: 3, segmentElapsedSec: 0, delayRemainingSec: 30 })
+    const me = makeTrain({ id: 'me', segmentIndex: 1, segmentElapsedSec: 0, delayRemainingSec: 10 })
+    expect(isBlockedByAhead(me, [ahead, me], track.segmentSec)).toBe(false)
+  })
+
+  it('맨 앞차(앞에 아무도 없음)는 막힌 게 아니다', () => {
+    const track = makeTrack()
+    const front = makeTrain({ id: 'front', segmentIndex: 3, segmentElapsedSec: 0 })
+    expect(isBlockedByAhead(front, [front], track.segmentSec)).toBe(false)
+  })
+})
+
+describe('getUpcomingTrains — blocked 플래그', () => {
+  it('실제로 지연 중인 앞차에 최소 간격으로 막힌 열차는 blocked:true로 표시한다', () => {
+    const track = makeTrack()
+    const trainsByTrack = {
+      [track.id]: [
+        makeTrain({ id: 'ahead', segmentIndex: 3, segmentElapsedSec: 0, delayRemainingSec: 30 }),
+        makeTrain({ id: 'stuck', segmentIndex: 1, segmentElapsedSec: 0 }),
+      ],
+    }
+    const result = getUpcomingTrains('종로3가', [track], trainsByTrack)
+    const stuck = result.find((r) => r.trainId === 'stuck')
+    expect(stuck?.blocked).toBe(true)
+  })
+
+  it('앞차가 최소 간격으로 붙어있어도 지연 중이 아니면 blocked:false다', () => {
+    const track = makeTrack()
+    const trainsByTrack = {
+      [track.id]: [
+        makeTrain({ id: 'ahead', segmentIndex: 3, segmentElapsedSec: 0 }),
+        makeTrain({ id: 'normal', segmentIndex: 1, segmentElapsedSec: 0 }),
+      ],
+    }
+    const result = getUpcomingTrains('종로3가', [track], trainsByTrack)
+    const normal = result.find((r) => r.trainId === 'normal')
+    expect(normal?.blocked).toBe(false)
   })
 })
 

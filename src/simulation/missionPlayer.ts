@@ -13,8 +13,36 @@ export interface UpcomingTrain {
   lineName: string
   color: string
   directionLabel: string
-  /** 도착까지 남은 시간(게임초) */
+  /** 도착까지 남은 시간(게임초). etaSec 계산은 간격 제한을 반영하지 않으므로, blocked인 경우 실제로는 더 걸릴 수 있다. */
   etaSec: number
+  /** 지금 이 순간 앞차와의 최소 간격 제한에 막혀 못 움직이는 상태인지(자기 자신의 지연은 아님). */
+  blocked: boolean
+}
+
+/**
+ * train이 지금 이 순간, 자기 자신의 지연은 없지만 앞쪽에서 실제로 지연 중인 열차 때문에
+ * (그 사이 열차들이 전부 최소 간격으로 꽉 막혀 있어) 사실상 못 움직이는 상태인지 판정한다.
+ *
+ * 단순히 "바로 앞차와 MIN_GAP_STATIONS만큼 붙어있는지"만 보면 안 된다 — 혼잡한 노선에서는
+ * 아무 문제 없이 정상 운행 중인 열차들도 평소에 최소 간격으로 붙어서 나란히 달리는 게 정상이기
+ * 때문이다(그 자체는 지연이 아니라 정상적인 배차 간격 유지). 그래서 앞쪽으로 사슬을 따라가며,
+ * 간격이 최소치로 계속 이어지는 동안 실제로 "지연 중(delayRemainingSec>0)"인 열차를 만나는지까지 확인한다 —
+ * 만나면 그 지연이 뒤로 전파되어 나도 막힌 것이고, 중간에 여유(간격 벌어짐)가 생기면 사슬이 끊겨 막힌 게 아니다.
+ */
+export function isBlockedByAhead(train: Train, trainsOnTrack: Train[], segmentSec: number[]): boolean {
+  if (train.delayRemainingSec > 0) return false
+  const sorted = [...trainsOnTrack].sort((a, b) => trainPosition(b, segmentSec) - trainPosition(a, segmentSec))
+  const idx = sorted.findIndex((t) => t.id === train.id)
+  if (idx <= 0) return false
+
+  let cursorPos = trainPosition(train, segmentSec)
+  for (let i = idx - 1; i >= 0; i--) {
+    const otherPos = trainPosition(sorted[i], segmentSec)
+    if (otherPos - cursorPos > MIN_GAP_STATIONS + EPS) return false // 여유가 있는 열차를 만남 -> 사슬이 끊김, 막힌 게 아님
+    if (sorted[i].delayRemainingSec > 0) return true // 실제로 지연 중인 열차를 만남 -> 그 지연이 사슬을 타고 나에게까지 전파됨
+    cursorPos = otherPos
+  }
+  return false // 사슬 끝까지 아무도 실제로 지연 중이지 않음 -> 정상적으로 최소 간격을 유지하며 흐르는 중일 뿐
 }
 
 export function stationIndexInTrack(track: Track, stationName: string): number {
@@ -90,6 +118,7 @@ export function getUpcomingTrains(
         color: track.color,
         directionLabel,
         etaSec: eta,
+        blocked: isBlockedByAhead(train, trains, track.segmentSec),
       })
     }
 
@@ -109,6 +138,7 @@ export function getUpcomingTrains(
           color: track.color,
           directionLabel,
           etaSec: spawnEta,
+          blocked: false,
         })
       }
     }
