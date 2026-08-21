@@ -5,8 +5,10 @@ import { computeTrainScreenPositions } from './trainPositions'
 import { usePanZoom } from './usePanZoom'
 import { StationPopover } from './StationPopover'
 import { LineLegend } from './LineLegend'
+import { StationSearch } from './StationSearch'
 import { MAP_VIEWBOX, getStationCoord } from '../../data/coordinates'
 import { SUBWAY_LINES } from '../../data/lines'
+import { getUpcomingTrains } from '../../simulation/missionPlayer'
 
 const LINE_COLOR_BY_ID = new Map(SUBWAY_LINES.map((l) => [l.id, l.color]))
 const LINE_INFO_BY_ID = new Map(SUBWAY_LINES.map((l) => [l.id, { name: l.name, color: l.color }]))
@@ -37,6 +39,7 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
   const trainsByTrack = useSimulationStore((s) => s.trainsByTrack)
   const [selectedStation, setSelectedStation] = useState<string | null>(null)
   const [legendOpen, setLegendOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const [focusEnabled, setFocusEnabled] = useState(true)
 
   const { segments, stations } = useMemo(() => buildMapData(), [])
@@ -55,12 +58,23 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
     return null
   }, [rider, trains])
 
-  const { transform, handlers } = usePanZoom(
+  const { transform, setTransform, handlers } = usePanZoom(
     svgRef,
     MAP_VIEWBOX,
     { scale: 1, tx: 0, ty: 0 },
     rider && focusEnabled ? riderPoint : null,
   )
+
+  /** 검색 결과를 선택하면 그 역을 화면 중앙에 두는 배율로 지도를 이동시킨다(자동 추적 중이었다면 끈다). */
+  const JUMP_SCALE = 4
+  function jumpToStation(x: number, y: number) {
+    setFocusEnabled(false)
+    setTransform({
+      scale: JUMP_SCALE,
+      tx: MAP_VIEWBOX.minX + MAP_VIEWBOX.width / 2 - x * JUMP_SCALE,
+      ty: MAP_VIEWBOX.minY + MAP_VIEWBOX.height / 2 - y * JUMP_SCALE,
+    })
+  }
 
   const selected = stations.find((st) => st.name === selectedStation)
 
@@ -231,6 +245,7 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
           y={selectedScreenPos.y}
           stationName={selected.name}
           lines={selected.lineIds.map((id) => ({ id, ...(LINE_INFO_BY_ID.get(id) ?? { name: id, color: '#888' }) }))}
+          upcomingTrains={getUpcomingTrains(selected.name, tracks, trainsByTrack, 6)}
           onClose={() => setSelectedStation(null)}
         />
       )}
@@ -242,6 +257,16 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
       >
         노선 범례
       </button>
+
+      {!rider && (
+        <button
+          type="button"
+          onClick={() => setSearchOpen(true)}
+          className="absolute top-3 right-3 z-10 rounded-full border border-white/15 bg-[#0d1117]/90 px-3 py-2 text-xs font-medium text-white shadow-lg"
+        >
+          🔍 역 검색
+        </button>
+      )}
 
       {rider && (
         <button
@@ -260,6 +285,18 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
       )}
 
       {legendOpen && <LineLegend onClose={() => setLegendOpen(false)} />}
+
+      {searchOpen && (
+        <StationSearch
+          stations={stations}
+          onClose={() => setSearchOpen(false)}
+          onSelect={(s) => {
+            setSearchOpen(false)
+            setSelectedStation(s.name)
+            jumpToStation(s.x, s.y)
+          }}
+        />
+      )}
     </div>
   )
 }

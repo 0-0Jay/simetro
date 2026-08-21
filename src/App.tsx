@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <Header />
-      <main className="h-[90dvh] min-h-0 flex-1 overflow-hidden">
+      <main className="min-h-0 flex-1 overflow-hidden">
         {activeTab === 'home' && <HomeTab />}
         {activeTab === 'mission' && <MissionTab />}
         {activeTab === 'settings' && <SettingsTab />}

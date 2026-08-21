@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useMissionStore, type MissionRecord } from '../store/missionStore'
 import { useSimulationStore } from '../store/simulationStore'
 import { getAllStationNames } from '../simulation/routeGraph'
+import { todayKey } from '../simulation/missionGenerator'
 import { formatDuration } from '../utils/time'
 
 interface MissionHistoryModalProps {
@@ -9,6 +10,37 @@ interface MissionHistoryModalProps {
 }
 
 type SortDir = 'asc' | 'desc'
+
+interface MissionStats {
+  totalCount: number
+  totalSec: number
+  bestSec: number | null
+  countByDifficulty: Record<1 | 2 | 3, number>
+  streakDays: number
+}
+
+function computeStats(history: MissionRecord[]): MissionStats {
+  const countByDifficulty: Record<1 | 2 | 3, number> = { 1: 0, 2: 0, 3: 0 }
+  let totalSec = 0
+  let bestSec: number | null = null
+  const completedDays = new Set<string>()
+
+  for (const r of history) {
+    totalSec += r.elapsedSec
+    if (bestSec === null || r.elapsedSec < bestSec) bestSec = r.elapsedSec
+    countByDifficulty[r.difficulty]++
+    completedDays.add(todayKey(new Date(r.completedAtIso)))
+  }
+
+  let streakDays = 0
+  const cursor = new Date()
+  while (completedDays.has(todayKey(cursor))) {
+    streakDays++
+    cursor.setDate(cursor.getDate() - 1)
+  }
+
+  return { totalCount: history.length, totalSec, bestSec, countByDifficulty, streakDays }
+}
 
 export function MissionHistoryModal({ onClose }: MissionHistoryModalProps) {
   const missionHistory = useMissionStore((s) => s.missionHistory)
@@ -22,6 +54,7 @@ export function MissionHistoryModal({ onClose }: MissionHistoryModalProps) {
   const [sortDir, setSortDir] = useState<SortDir>('asc')
 
   const stationNames = useMemo(() => getAllStationNames(), [])
+  const stats = useMemo(() => computeStats(missionHistory), [missionHistory])
 
   const filtered = useMemo(() => {
     const list = missionHistory.filter((r) => {
@@ -47,6 +80,34 @@ export function MissionHistoryModal({ onClose }: MissionHistoryModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="mb-3 text-center font-medium text-[var(--text-primary)]">미션 기록 내역</h2>
+
+        {stats.totalCount > 0 && (
+          <div className="mb-3 grid grid-cols-2 gap-2 rounded-lg border border-[var(--border)] p-2.5 text-center sm:grid-cols-4">
+            <div>
+              <p className="text-lg font-bold text-[var(--text-primary)]">{stats.totalCount}</p>
+              <p className="text-[10px] text-[var(--text-secondary)]">완료한 미션</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-[var(--text-primary)]">{formatDuration(stats.totalSec)}</p>
+              <p className="text-[10px] text-[var(--text-secondary)]">누적 소요시간</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-[var(--text-primary)]">{stats.bestSec !== null ? formatDuration(stats.bestSec) : '-'}</p>
+              <p className="text-[10px] text-[var(--text-secondary)]">최고 기록</p>
+            </div>
+            <div>
+              <p className="text-lg font-bold text-[var(--text-primary)]">{stats.streakDays}일</p>
+              <p className="text-[10px] text-[var(--text-secondary)]">연속 플레이</p>
+            </div>
+            <div className="col-span-2 flex justify-center gap-3 pt-1 sm:col-span-4">
+              {([1, 2, 3] as const).map((d) => (
+                <span key={d} className="text-xs text-[var(--text-secondary)]">
+                  {'★'.repeat(d)} {stats.countByDifficulty[d]}회
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         <datalist id="mission-history-stations">
           {stationNames.map((name) => (

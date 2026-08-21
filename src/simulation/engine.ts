@@ -1,11 +1,25 @@
 import type { Track } from './tracks'
 import type { Train } from './train'
 import { trainPosition } from './train'
-import { rollDelay } from './delayEvents'
+import { rollDelay, type DelayCategory } from './delayEvents'
+
+/** 역 도착 시 지연이 새로 발생할 때마다 호출되는 콜백 정보 (뉴스 티커 등 표시용). */
+export interface DelayRollEvent {
+  stationName: string
+  category: DelayCategory
+  reason: string
+  durationSec: number
+}
 
 /** 열차 사이에 반드시 1개 역이 있어야 하므로, station-index 기준 최소 간격은 2 (역[열차]--역--역[열차]) */
 export const MIN_GAP_STATIONS = 2
 const EPS = 1e-6
+
+/** 하루 운행 타임라인 (초 단위, 자정 기준). 첫차 05:30 ~ 다음날 01:00(=25:00)까지를 기본 범위로 둔다. */
+export const SERVICE_START_SECONDS = 5 * 3600 + 30 * 60
+export const SERVICE_END_SECONDS = 25 * 3600
+/** 막차 정책: 이 시각(자정) 이후로는 신규 열차를 투입하지 않는다. 이미 달리던 열차는 하던 구간/바퀴를 마저 마치고 소멸한다. */
+export const LAST_TRAIN_CUTOFF_SECONDS = SERVICE_END_SECONDS - 3600
 
 /** 트랙 전체(처음~끝)를 3정거장 간격으로 가득 채워 초기 배치한다. phase(0~2)만 랜덤. */
 export function initializeTrainsForTrack(track: Track, phase: number, idPrefix: string): Train[] {
@@ -38,6 +52,7 @@ export function tickTrack(
   rng: () => number,
   spawnIdPrefix: string,
   spawnSeqRef: { current: number },
+  onDelay?: (event: DelayRollEvent) => void,
 ): Train[] {
   if (track.segmentSec.length === 0) return trains
 
@@ -91,6 +106,11 @@ export function tickTrack(
         train.segmentElapsedSec = 0
         if (train.segmentIndex >= segCount) {
           if (track.isLoop) {
+            if (gameSeconds >= LAST_TRAIN_CUTOFF_SECONDS) {
+              // 막차 시간대: 순환선도 지금 돌고 있던 바퀴를 마치는 시점에 소멸시켜 서서히 운행을 종료한다.
+              arrivedTerminus = true
+              break
+            }
             // 순환선: 소멸시키지 않고 한 바퀴를 돌아 다시 처음(0)부터 이어간다 (같은 열차가 계속 순환).
             train.segmentIndex -= segCount
           } else {
@@ -102,6 +122,12 @@ export function tickTrack(
         if (rolled) {
           train.delayRemainingSec = rolled.durationSec
           train.activeDelay = { category: rolled.category, label: rolled.label }
+          onDelay?.({
+            stationName: track.stops[train.segmentIndex].name,
+            category: rolled.category,
+            reason: rolled.reason,
+            durationSec: rolled.durationSec,
+          })
         }
       }
     }
@@ -117,7 +143,8 @@ export function tickTrack(
   }
 
   // 순환선은 소멸이 없으므로 별도 투입이 필요 없다. 종점이 있는 노선만 기점에 새 열차를 투입한다.
-  if (!track.isLoop) {
+  // 막차 시간대(자정 이후)엔 신규 투입을 멈춘다 — 이미 달리는 열차만 마저 운행하고 서서히 빈다.
+  if (!track.isLoop && gameSeconds < LAST_TRAIN_CUTOFF_SECONDS) {
     const rearmostPos = result.length > 0 ? Math.min(...result.map((t) => trainPosition(t, track.segmentSec))) : Infinity
     if (result.length === 0 || rearmostPos >= MIN_GAP_STATIONS - EPS) {
       result.push({

@@ -1,7 +1,10 @@
+import { useEffect, useRef } from 'react'
 import { useMissionStore, type ArmedBoard } from '../store/missionStore'
-import { useSimulationStore, formatGameClock } from '../store/simulationStore'
+import { useSimulationStore, formatGameClock, LAST_TRAIN_CUTOFF_SECONDS } from '../store/simulationStore'
+import { useSettingsStore } from '../store/settingsStore'
 import { getUpcomingTrains, directionLabelFor, type UpcomingTrain } from '../simulation/missionPlayer'
 import { formatDuration } from '../utils/time'
+import { playBoardSound, playAlightSound, playCompleteSound, playDelaySound } from '../utils/sound'
 import { LINE_BADGE_LABEL } from '../data/lineBadges'
 import type { Track } from '../simulation/tracks'
 import type { Train } from '../simulation/train'
@@ -17,6 +20,45 @@ export function MissionStatusPanel() {
   const gameSeconds = useSimulationStore((s) => s.gameSeconds)
   const tracks = useSimulationStore((s) => s.tracks)
   const trainsByTrack = useSimulationStore((s) => s.trainsByTrack)
+  const soundEnabled = useSettingsStore((s) => s.soundEnabled)
+
+  const prevModeRef = useRef<'waiting' | 'riding' | null>(null)
+  const prevCompletedRef = useRef<number | null>(null)
+  const prevDelayRef = useRef(false)
+
+  // 탑승/하차/완료/지연 발생 시점을 감지해 짧은 효과음·진동을 울린다(상태 전이 감지이므로 useEffect에서 처리).
+  useEffect(() => {
+    if (!active) {
+      prevModeRef.current = null
+      prevCompletedRef.current = null
+      prevDelayRef.current = false
+      return
+    }
+    const { player, completedAtGameSeconds } = active
+
+    if (soundEnabled) {
+      if (prevCompletedRef.current === null && completedAtGameSeconds !== null) {
+        playCompleteSound()
+      } else if (prevModeRef.current === 'waiting' && player.mode === 'riding') {
+        playBoardSound()
+      } else if (prevModeRef.current === 'riding' && player.mode === 'waiting') {
+        playAlightSound()
+      }
+    }
+
+    if (player.mode === 'riding') {
+      const track = tracks.find((t) => t.id === player.trackId)
+      const train = track ? trainsByTrack[player.trackId]?.find((t) => t.id === player.trainId) : undefined
+      const hasDelay = !!train?.activeDelay
+      if (soundEnabled && hasDelay && !prevDelayRef.current) playDelaySound()
+      prevDelayRef.current = hasDelay
+    } else {
+      prevDelayRef.current = false
+    }
+
+    prevModeRef.current = player.mode
+    prevCompletedRef.current = completedAtGameSeconds
+  }, [active, soundEnabled, tracks, trainsByTrack])
 
   if (!active) return null
   const { mission, player } = active
@@ -69,6 +111,7 @@ export function MissionStatusPanel() {
           armedBoard={player.armedBoard}
           tracks={tracks}
           trainsByTrack={trainsByTrack}
+          gameSeconds={gameSeconds}
           onSelect={armBoard}
           onSelectSpawn={armBoardSpawn}
         />
@@ -139,6 +182,7 @@ function WaitingPanel({
   armedBoard,
   tracks,
   trainsByTrack,
+  gameSeconds,
   onSelect,
   onSelectSpawn,
 }: {
@@ -146,10 +190,12 @@ function WaitingPanel({
   armedBoard?: ArmedBoard
   tracks: Track[]
   trainsByTrack: Record<string, Train[]>
+  gameSeconds: number
   onSelect: (trackId: string, trainId: string) => void
   onSelectSpawn: (trackId: string, knownTrainIds: string[]) => void
 }) {
   const upcoming = getUpcomingTrains(station, tracks, trainsByTrack)
+  const isOvernight = gameSeconds >= LAST_TRAIN_CUTOFF_SECONDS
 
   const handleClick = (tr: UpcomingTrain) => {
     if (tr.trainId === null) {
@@ -162,7 +208,12 @@ function WaitingPanel({
   return (
     <div className="flex flex-1 flex-col gap-1.5 overflow-y-auto">
       <p className="text-xs text-[var(--text-secondary)]">다음 열차 탑승 — 목록에서 선택하세요</p>
-      {upcoming.length === 0 && <p className="text-sm text-[var(--text-secondary)]">다가오는 열차 정보가 없습니다.</p>}
+      {upcoming.length === 0 && isOvernight && (
+        <p className="text-sm" style={{ color: '#ff9500' }}>
+          막차가 끊긴 심야 시간대입니다 — 첫차(05:30)까지 운행하는 열차가 없어요.
+        </p>
+      )}
+      {upcoming.length === 0 && !isOvernight && <p className="text-sm text-[var(--text-secondary)]">다가오는 열차 정보가 없습니다.</p>}
       {upcoming.map((tr) => {
         const isArmed = armedBoard?.trackId === tr.trackId && armedBoard?.trainId === tr.trainId
         return (
