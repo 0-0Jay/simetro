@@ -45,6 +45,13 @@ export function initializeTrainsForTrack(track: Track, phase: number, idPrefix: 
     })
     position += MIN_GAP_STATIONS
   }
+  // 순환선은 소멸·재투입이 없어 열차 수가 평생 고정된다. 위 로직대로 끝까지 꽉 채우면 이음매(마지막 열차 ->
+  // 첫 열차, 한 바퀴 건너) 간격이 MIN_GAP_STATIONS 미만이 될 수 있는데, tickTrack이 이 이음매 간격도
+  // 지키도록 강제하기 때문에(맨 앞차도 맨 뒤차를 앞차로 간주) 슬랙이 0이면 전체가 처음부터 못 움직이고
+  // 얼어붙는다. 마지막 한 대를 빼서 이음매 쪽에 항상 MIN_GAP_STATIONS보다 넉넉한 여유를 만들어 둔다.
+  if (track.isLoop && trains.length > 1) {
+    trains.pop()
+  }
   return trains
 }
 
@@ -70,7 +77,14 @@ export function tickTrack(
   )
 
   const result: Train[] = []
-  let aheadPos = Number.POSITIVE_INFINITY
+  // 순환선은 "맨 앞차"도 원 위에서는 "맨 뒤차"(이음매 건너편)를 쫓고 있는 것과 같다. 맨 뒤차 위치에
+  // 한 바퀴(segmentSec.length)를 더한 값을 가상의 "이음매 건너 앞차"로 취급해 최소 간격을 강제한다.
+  // initializeTrainsForTrack이 순환선에서 항상 이음매 슬랙을 남겨두므로(열차 한 대를 덜 투입), 이 제약이
+  // 시작부터 전체를 얼어붙게 만들 일은 없다.
+  let aheadPos =
+    track.isLoop && sorted.length > 1
+      ? trainPosition(sorted[sorted.length - 1], track.segmentSec) + track.segmentSec.length
+      : Number.POSITIVE_INFINITY
 
   for (const original of sorted) {
     const train: Train = { ...original }

@@ -52,6 +52,22 @@ describe('initializeTrainsForTrack', () => {
     const trains = initializeTrainsForTrack(track, 1, 'init')
     expect(trains.map((t) => t.segmentIndex)).toEqual([1, 3])
   })
+
+  it.each([20, 21, 7, 13, 3])(
+    'segCount=%i인 순환선: 이음매(마지막 열차 -> 첫 열차, 한 바퀴 건너) 간격도 MIN_GAP_STATIONS 이상이다',
+    (segCount) => {
+      const track = makeLoopTrack(segCount)
+      for (let phase = 0; phase < MIN_GAP_STATIONS; phase++) {
+        const trains = initializeTrainsForTrack(track, phase, 'init')
+        if (trains.length < 2) continue // 열차가 1대 이하면 이음매 충돌 자체가 성립하지 않음
+        const sorted = [...trains].sort((a, b) => trainPosition(b, track.segmentSec) - trainPosition(a, track.segmentSec))
+        const frontPos = trainPosition(sorted[0], track.segmentSec)
+        const backPos = trainPosition(sorted[sorted.length - 1], track.segmentSec)
+        const wrapGap = segCount - frontPos + backPos
+        expect(wrapGap).toBeGreaterThanOrEqual(MIN_GAP_STATIONS)
+      }
+    },
+  )
 })
 
 describe('tickTrack — 간격 유지', () => {
@@ -91,6 +107,60 @@ describe('tickTrack — 순환선', () => {
     }
     expect(trains).toHaveLength(1)
     expect(trains[0].id).toBe('solo')
+  })
+})
+
+describe('tickTrack — 순환선 이음매 간격 시행', () => {
+  it('맨 앞차는 아주 큰 틱이 와도 맨 뒤차(이음매 건너편)와 MIN_GAP_STATIONS보다 가까워지지 않는다', () => {
+    const track = makeLoopTrack(10) // segCount=10
+    let trains: Train[] = [
+      { id: 'back', trackId: track.id, segmentIndex: 1, segmentElapsedSec: 0, delayRemainingSec: 2000 }, // 긴 지연으로 이 틱 내내 정지
+      { id: 'front', trackId: track.id, segmentIndex: 8, segmentElapsedSec: 0, delayRemainingSec: 0 },
+    ]
+    const seqRef = { current: 0 }
+    // 배경 탭에서 오래 있다 돌아온 것처럼 한 번에 아주 큰 델타를 준다.
+    trains = tickTrack(track, trains, 1000, 1000, noRng, 'train', seqRef)
+    const back = trains.find((t) => t.id === 'back')!
+    const front = trains.find((t) => t.id === 'front')!
+    const backPos = trainPosition(back, track.segmentSec)
+    const frontPos = trainPosition(front, track.segmentSec)
+    expect(backPos).toBeCloseTo(1, 5) // 정지 상태 그대로
+    const wrapGap = track.segmentSec.length - frontPos + backPos
+    expect(wrapGap).toBeGreaterThanOrEqual(MIN_GAP_STATIONS - 1e-6)
+  })
+
+  it('initializeTrainsForTrack + 이음매 시행을 함께 써도 전체가 얼어붙지 않는다(슬랙 확보 확인)', () => {
+    const track = makeLoopTrack(20)
+    let trains: Train[] = initializeTrainsForTrack(track, 0, 'init')
+    const seqRef = { current: 0 }
+    const beforeById = new Map(trains.map((t) => [t.id, trainPosition(t, track.segmentSec)]))
+
+    for (let i = 0; i < 50; i++) {
+      trains = tickTrack(track, trains, 30, 1000 + i * 30, noRng, 'train', seqRef)
+    }
+    let totalMovement = 0
+    for (const t of trains) {
+      const before = beforeById.get(t.id)
+      if (before !== undefined) totalMovement += Math.abs(trainPosition(t, track.segmentSec) - before)
+    }
+    expect(totalMovement).toBeGreaterThan(1)
+  })
+
+  it('이음매 시행 하에서도 한 대의 긴 지연이 전체를 영구 정지(데드락)시키지 않는다', () => {
+    const track = makeLoopTrack(20)
+    let trains: Train[] = initializeTrainsForTrack(track, 0, 'init')
+    const seqRef = { current: 0 }
+    const frontmost = [...trains].sort((a, b) => trainPosition(b, track.segmentSec) - trainPosition(a, track.segmentSec))[0]
+    trains = trains.map((t) =>
+      t.id === frontmost.id
+        ? { ...t, delayRemainingSec: 1200, activeDelay: { category: 'incident' as const, label: '열차 고장', reason: '열차 고장', willBreakdown: false } }
+        : t,
+    )
+
+    for (let i = 0; i < 400; i++) {
+      trains = tickTrack(track, trains, 10, 1000 + i * 10, noRng, 'train', seqRef)
+    }
+    expect(trains.every((t) => t.delayRemainingSec === 0)).toBe(true)
   })
 })
 
