@@ -18,6 +18,18 @@ function dist(a: [number, number], b: [number, number]): number {
   return Math.hypot(a[0] - b[0], a[1] - b[1])
 }
 
+/** track.stops -> 좌표 배열은 track이 살아있는 한 절대 안 바뀌는데(정적 데이터), 이 계산이 이전엔
+ * 매 프레임(열차 위치 갱신마다) 트랙 수만큼 매번 새로 돌고 있었다. track.id로 한 번만 계산해 캐싱한다. */
+const coordsCache = new Map<string, ([number, number] | undefined)[]>()
+function coordsForTrack(track: Track): ([number, number] | undefined)[] {
+  let coords = coordsCache.get(track.id)
+  if (!coords) {
+    coords = track.stops.map((s) => getStationCoord(s.name))
+    coordsCache.set(track.id, coords)
+  }
+  return coords
+}
+
 /** points(다중 절점 폴리라인)를 따라 t(0~1, 호 길이 비율) 위치의 좌표와 진행각(도)을 계산 */
 function pointAndAngleAt(points: [number, number][], t: number): { x: number; y: number; angle: number } {
   if (points.length < 2) {
@@ -60,7 +72,7 @@ export function computeTrainScreenPositions(
   for (const track of tracks) {
     const trains = trainsByTrack[track.id]
     if (!trains || trains.length === 0) continue
-    const coords = track.stops.map((s) => getStationCoord(s.name))
+    const coords = coordsForTrack(track)
     if (coords.some((c) => !c)) continue // 아직 좌표 배치가 안 된 노선은 지도에 표시하지 않음
 
     for (const train of trains) {
