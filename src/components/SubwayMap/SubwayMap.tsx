@@ -9,6 +9,7 @@ import { StationSearch } from './StationSearch'
 import { MAP_VIEWBOX, getStationCoord } from '../../data/coordinates'
 import { SUBWAY_LINES } from '../../data/lines'
 import { getUpcomingTrains } from '../../simulation/missionPlayer'
+import { mix } from '../../utils/color'
 
 const LINE_COLOR_BY_ID = new Map(SUBWAY_LINES.map((l) => [l.id, l.color]))
 const LINE_INFO_BY_ID = new Map(SUBWAY_LINES.map((l) => [l.id, { name: l.name, color: l.color }]))
@@ -242,13 +243,13 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
           )
         })}
 
-        {/* 실시간 열차 위치 — 진행방향을 가리키는 화살표 */}
+        {/* 실시간 열차 위치 — 진행방향을 가리키는 화살표. 급행은 노선색을 살짝 밝게(흰색 혼합) 해서 구분한다. */}
         {trains.map((tr) => (
           <path
             key={tr.id}
             d={TRAIN_ARROW_PATH}
             transform={`translate(${tr.x} ${tr.y}) rotate(${tr.angle})`}
-            fill={tr.hasDelay ? '#ff3b30' : tr.color}
+            fill={tr.hasDelay ? '#ff3b30' : tr.isExpress ? mix(tr.color, '#ffffff', 0.55) : tr.color}
             stroke="#ffffff"
             strokeWidth={0.9}
             strokeLinejoin="round"

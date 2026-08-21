@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { initializeTrainsForTrack, tickTrack, MIN_GAP_STATIONS, LAST_TRAIN_CUTOFF_SECONDS, SERVICE_END_SECONDS } from './engine'
-import { trainPosition } from './train'
+import { trainPosition, effectiveSegmentSec } from './train'
 import type { Track } from './tracks'
 import type { Train } from './train'
 
@@ -250,5 +250,92 @@ describe('tickTrack — 막차 시간대', () => {
 
   it('LAST_TRAIN_CUTOFF_SECONDS는 SERVICE_END_SECONDS보다 작다(막차 유예 구간이 실제로 존재)', () => {
     expect(LAST_TRAIN_CUTOFF_SECONDS).toBeLessThan(SERVICE_END_SECONDS)
+  })
+})
+
+/** 급행 테스트용 트랙: 10개 역(9구간), 0/9번 역만 급행 정차. 5번 역은 정차 없이 통과하면서 대피만 가능한 대피역
+ *  (실제 9호선의 선유도/샛강/사평/삼성중앙처럼 급행 정차역이 아닌 순수 통과형 대피역에 해당). */
+function makeExpressTrack(): Track {
+  const stops = Array.from({ length: 10 }, (_, i) => ({ name: `S${i}`, cumulativeKm: i }))
+  const segmentSec = Array.from({ length: 9 }, () => 100)
+  const expressStopIndices = new Set([0, 9])
+  const passingStationIndices = new Set([5])
+  const expressSegmentSec = segmentSec.map((sec, i) => (expressStopIndices.has(i + 1) ? sec : 40))
+  return makeTrack({ stops, segmentSec, expressStopIndices, passingStationIndices, expressSegmentSec })
+}
+
+describe('tickTrack — 급행/완행 상호작용', () => {
+  it('급행 열차는 통과역 구간에서 완행보다 빠르게(단축된 시간으로) 이동한다', () => {
+    const track = makeExpressTrack()
+    let trains: Train[] = [
+      { id: 'express', trackId: track.id, segmentIndex: 0, segmentElapsedSec: 0, delayRemainingSec: 0, trainClass: 'express' },
+    ]
+    const seqRef = { current: 0 }
+    // 40초짜리 통과 구간 하나를 정확히 끝낼 만큼만 전진시킨다.
+    trains = tickTrack(track, trains, 40, 1000, noRng, 'train', seqRef)
+    const express = trains.find((t) => t.id === 'express')!
+    expect(express.segmentIndex).toBe(1) // 완행이라면 100초가 필요해 아직 도착 못 했을 구간을 급행은 40초 만에 통과
+  })
+
+  it('완행은 같은 구간에서 단축 없이 원래 소요시간을 그대로 쓴다', () => {
+    const track = makeExpressTrack()
+    let trains: Train[] = [{ id: 'local', trackId: track.id, segmentIndex: 0, segmentElapsedSec: 0, delayRemainingSec: 0 }]
+    const seqRef = { current: 0 }
+    trains = tickTrack(track, trains, 40, 1000, noRng, 'train', seqRef)
+    const local = trains.find((t) => t.id === 'local')!
+    expect(local.segmentIndex).toBe(0) // 완행은 100초가 필요하므로 40초로는 아직 다음 역에 못 도착
+    expect(local.segmentElapsedSec).toBeCloseTo(40, 5)
+  })
+
+  it('완행이 대피역에서 순서를 양보하면, 최소 간격으로 바짝 뒤따르던 급행이 결국 그 완행을 추월한다', () => {
+    const track = makeExpressTrack()
+    let trains: Train[] = [
+      { id: 'local', trackId: track.id, segmentIndex: 3, segmentElapsedSec: 0, delayRemainingSec: 0 },
+      { id: 'express', trackId: track.id, segmentIndex: 1, segmentElapsedSec: 0, delayRemainingSec: 0, trainClass: 'express' },
+    ]
+    const seqRef = { current: 0 }
+
+    let overtook = false
+    for (let i = 0; i < 300 && !overtook; i++) {
+      trains = tickTrack(track, trains, 10, 1000 + i * 10, noRng, 'train', seqRef)
+      const local = trains.find((t) => t.id === 'local')
+      const express = trains.find((t) => t.id === 'express')
+      if (local && express) {
+        const localPos = trainPosition(local, effectiveSegmentSec(track, local))
+        const expressPos = trainPosition(express, effectiveSegmentSec(track, express))
+        if (expressPos > localPos + 1e-6) overtook = true
+      }
+    }
+    expect(overtook).toBe(true)
+  })
+
+  it('대피역이 아닌 곳에서는 완행도 정상적으로 급행에게 최소 간격을 유지시킨다(추월 불가)', () => {
+    // 대피역(5번)에 도달하기 훨씬 전, 아주 짧은 시간만 진행시켜 급행이 완행을 무시하고 앞질러 가지 않는지 확인.
+    const track = makeExpressTrack()
+    let trains: Train[] = [
+      { id: 'local', trackId: track.id, segmentIndex: 3, segmentElapsedSec: 0, delayRemainingSec: 0 },
+      { id: 'express', trackId: track.id, segmentIndex: 1, segmentElapsedSec: 0, delayRemainingSec: 0, trainClass: 'express' },
+    ]
+    const seqRef = { current: 0 }
+    trains = tickTrack(track, trains, 5, 1000, noRng, 'train', seqRef)
+    const local = trains.find((t) => t.id === 'local')!
+    const express = trains.find((t) => t.id === 'express')!
+    const localPos = trainPosition(local, effectiveSegmentSec(track, local))
+    const expressPos = trainPosition(express, effectiveSegmentSec(track, express))
+    expect(expressPos).toBeLessThanOrEqual(localPos - MIN_GAP_STATIONS + 1e-6)
+  })
+
+  it('initializeTrainsForTrack은 급행 노선이면 일부(전부/전무가 아닌) 열차를 급행으로 배정한다', () => {
+    const track = makeExpressTrack()
+    const trains = initializeTrainsForTrack(track, 0, 'init')
+    const expressCount = trains.filter((t) => t.trainClass === 'express').length
+    expect(expressCount).toBeGreaterThan(0)
+    expect(expressCount).toBeLessThan(trains.length)
+  })
+
+  it('급행 서비스가 없는 트랙은 initializeTrainsForTrack이 전부 완행으로만 배정한다', () => {
+    const track = makeTrack()
+    const trains = initializeTrainsForTrack(track, 0, 'init')
+    expect(trains.every((t) => t.trainClass === undefined)).toBe(true)
   })
 })

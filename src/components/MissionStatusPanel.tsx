@@ -8,6 +8,7 @@ import { playBoardSound, playAlightSound, playCompleteSound, playDelaySound } fr
 import { LineLabelCard } from './LineLabelCard'
 import type { Track } from '../simulation/tracks'
 import type { Train } from '../simulation/train'
+import { effectiveSegmentSec } from '../simulation/train'
 
 export function MissionStatusPanel() {
   const active = useMissionStore((s) => s.activeMission)
@@ -192,6 +193,14 @@ function WaitingPanel({
           >
             <span className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: isArmed ? '#ffffff' : tr.color }} />
+              {tr.isExpress && (
+                <span
+                  className="rounded px-1 text-[10px] font-bold"
+                  style={{ background: isArmed ? '#ffffff' : '#ffd700', color: '#1a1a1a' }}
+                >
+                  급행
+                </span>
+              )}
               {tr.directionLabel}
               {tr.trainId === null && <span className="text-[10px] opacity-80">(신규 투입)</span>}
               {tr.blocked && <span className="text-[10px] opacity-80">(정체 — 지연될 수 있음)</span>}
@@ -228,24 +237,39 @@ function RidingPanel({
     return <p className="text-sm text-[var(--text-secondary)]">열차 정보를 불러오는 중...</p>
   }
 
-  const segLen = track.segmentSec[train.segmentIndex] ?? 0
+  const segmentSec = effectiveSegmentSec(track, train)
+  const segLen = segmentSec[train.segmentIndex] ?? 0
   const nextStation = track.stops[Math.min(train.segmentIndex + 1, track.stops.length - 1)]
-  const remainingSec = Math.max(0, segLen - train.segmentElapsedSec) + train.delayRemainingSec
+  const remainingSec = Math.max(0, segLen - train.segmentElapsedSec) + train.delayRemainingSec + (train.yieldRemainingSec ?? 0)
+  const isExpress = train.trainClass === 'express'
+  const isYielding = (train.yieldRemainingSec ?? 0) > 0
   // 자기 자신의 지연은 없지만 앞차와의 최소 간격 제한에 막혀 사실상 못 움직이는 상태 — 이 경우 위 remainingSec은
   // "막힘이 안 풀렸을 때"를 가정한 부정확한(멈춰있는 것처럼 보이는) 값이라 그대로 보여주지 않는다.
-  const blocked = !train.activeDelay && isBlockedByAhead(train, trainsByTrack[trackId] ?? [], track.segmentSec)
+  const blocked = !train.activeDelay && !isYielding && isBlockedByAhead(train, trainsByTrack[trackId] ?? [], track)
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-2">
       <div>
         <p className="text-xs text-[var(--text-secondary)]">현재 탑승 중</p>
-        <p className="text-base font-medium text-[var(--text-primary)]">{directionLabelFor(track)}</p>
+        <p className="text-base font-medium text-[var(--text-primary)]">
+          {isExpress && (
+            <span className="mr-1.5 rounded px-1 text-xs font-bold" style={{ background: '#ffd700', color: '#1a1a1a' }}>
+              급행
+            </span>
+          )}
+          {directionLabelFor(track)}
+        </p>
         <p className="mt-1 text-sm text-[var(--text-secondary)]">
-          다음 역 {nextStation?.name} · {blocked ? '앞차 통행 대기 중' : `${formatDuration(remainingSec)} 후 도착`}
+          다음 역 {nextStation?.name} · {blocked ? '앞차 통행 대기 중' : isYielding ? '급행 통과 대기 중' : `${formatDuration(remainingSec)} 후 도착`}
         </p>
         {train.activeDelay && (
           <p className="mt-1 text-sm" style={{ color: '#ff9500' }}>
             {train.activeDelay.label} (지연 중)
+          </p>
+        )}
+        {isYielding && (
+          <p className="mt-1 text-sm" style={{ color: '#5ac8fa' }}>
+            대피역에서 급행 열차가 먼저 지나가길 기다리는 중입니다
           </p>
         )}
         {blocked && (

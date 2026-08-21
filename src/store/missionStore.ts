@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { generateDailyMissions, todayKey, type Mission } from '../simulation/missionGenerator'
 import { stationIndexInTrack, stationsCrossedThisTick } from '../simulation/missionPlayer'
-import { trainPosition } from '../simulation/train'
+import { trainPosition, effectiveSegmentSec } from '../simulation/train'
 import type { Track } from '../simulation/tracks'
 import type { Train } from '../simulation/train'
 import type { TrainWithdrawal } from './simulationStore'
@@ -192,7 +192,7 @@ export const useMissionStore = create<MissionState>()(
                 nextPlayer = { ...player, armedBoard: undefined }
               } else {
                 const idx = stationIndexInTrack(track, player.station)
-                const pos = idx >= 0 ? trainPosition(train, track.segmentSec) : -Infinity
+                const pos = idx >= 0 ? trainPosition(train, effectiveSegmentSec(track, train)) : -Infinity
                 if (idx >= 0 && pos >= idx - 1e-6) {
                   nextPlayer = {
                     mode: 'riding',

@@ -13,13 +13,13 @@ npm run dev      # vite dev server
 npm run build    # tsc -b && vite build
 npm run lint      # oxlint
 npm run preview   # serve the production build locally
+npm test          # vitest run — pure simulation logic (engine/tracks/missionPlayer/routeGraph/simulationStore)
+npm run audit      # scripts/audit-data.mjs — coordinate coverage, network connectivity, zigzag curves, bend-data anomalies, station-naming
 ```
 
-There is no test suite configured in this repo (no test runner, no test files).
-
-Type-check and lint are the two gates to run after any change:
+Type-check, lint, tests, and the data audit are the gates to run after any change:
 ```bash
-npx tsc -b && npx oxlint
+npx tsc -b && npx oxlint && npm test && npm run audit
 ```
 
 Deploys to GitHub Pages via `.github/workflows/deploy.yml` on push to `main` (Pages source must be set to "GitHub Actions" in repo settings). `vite.config.ts` sets `base: '/simetro/'` only for `command === 'build'`, so local dev is unaffected.
@@ -37,7 +37,9 @@ Deploys to GitHub Pages via `.github/workflows/deploy.yml` on push to `main` (Pa
 
 ### Train movement is position-based, not schedule-based
 
-There is no headway/timetable concept. Trains maintain a strict minimum gap of `MIN_GAP_STATIONS` (currently 2, i.e. one station between adjacent trains) via `src/simulation/engine.ts`: a following train's position is capped at `aheadPos - MIN_GAP_STATIONS`, and a new train spawns at a track's origin exactly when the rearmost train has moved `MIN_GAP_STATIONS` past it. `initializeTrainsForTrack` fills a track end-to-end at this spacing on load (random phase 0..MIN_GAP_STATIONS-1). Loop tracks (`isLoop`) never spawn/despawn — `segmentIndex` wraps via modulo instead of terminating. Delay events (`src/simulation/delayEvents.ts`) roll on each station arrival and, because trains are packed at minimum legal spacing, a single delay can cascade backward through every train queued behind it — this is expected emergent behavior, not a bug, when a train appears "stuck" for a while.
+There is no headway/timetable concept. Trains maintain a strict minimum gap of `MIN_GAP_STATIONS` (currently 2, i.e. one station between adjacent trains) via `src/simulation/engine.ts`: a following train's position is capped at `aheadPos - MIN_GAP_STATIONS`, and a new train spawns at a track's origin exactly when the rearmost train has moved `MIN_GAP_STATIONS` past it. `initializeTrainsForTrack` fills a track end-to-end at this spacing on load (random phase 0..MIN_GAP_STATIONS-1). Loop tracks (`isLoop`) never spawn/despawn — `segmentIndex` wraps via modulo instead of terminating, and always keep at least one train's worth of slack at the seam (`initializeTrainsForTrack` deliberately under-fills by one train) because `tickTrack` also enforces `MIN_GAP_STATIONS` across the loop's seam (frontmost train vs. the wrapped-around last train) — without that slack a freshly-loaded loop would deadlock at t=0. Delay events (`src/simulation/delayEvents.ts`) roll on each station arrival and, because trains are packed at minimum legal spacing, a single delay can cascade backward through every train queued behind it — this is expected emergent behavior, not a bug, when a train appears "stuck" for a while.
+
+**Express trains** (currently 9호선 only, via `SubwayLine.express` in `seoulLightRail.json`): a `Track` built from a line with `express` data gets `expressStopIndices`/`passingStationIndices` (station names resolved to that direction's stop indices) and `expressSegmentSec` (per-segment travel time with `EXPRESS_DWELL_BONUS_SEC` subtracted for segments leading into a skipped station, floored at `MIN_EXPRESS_SEGMENT_SEC`). `initializeTrainsForTrack`/spawn logic tags every `EXPRESS_EVERY_N`th train `trainClass: 'express'`; `effectiveSegmentSec(track, train)` (in `train.ts`) is the single place that picks the express-vs-local segment array — every position/ETA/rendering call site must go through it rather than reading `track.segmentSec` directly. Overtaking models the real passing-track mechanic: a local arriving at a `passingStationIndices` stop gets `yieldRemainingSec = YIELD_HOLD_SEC` (a scheduled wait, not a "delay" — deliberately kept out of `activeDelay`/the delay-news system), and `tickTrack`'s blocker lookup (`findAheadPos`) skips any yielding local when computing an *express*'s cap, letting it close the gap and pass. `YIELD_HOLD_SEC` must stay comfortably above `MIN_GAP_STATIONS × (fastest express segment time)` — the time an express tailgating at exactly minimum gap needs to close that gap and pull clearly ahead — or the express never finishes overtaking before the local resumes (this was tuned via `engine.test.ts`'s overtake test, not guessed).
 
 ### State (Zustand stores in `src/store/`)
 

@@ -1,6 +1,6 @@
 import type { Track } from './tracks'
 import type { Train } from './train'
-import { trainPosition } from './train'
+import { trainPosition, effectiveSegmentSec } from './train'
 import { MIN_GAP_STATIONS } from './engine'
 
 const EPS = 1e-6
@@ -17,32 +17,42 @@ export interface UpcomingTrain {
   etaSec: number
   /** 지금 이 순간 앞차와의 최소 간격 제한에 막혀 못 움직이는 상태인지(자기 자신의 지연은 아님). */
   blocked: boolean
+  /** 급행 열차인지 — 화면에 구분 표시하는 데 쓰인다. */
+  isExpress: boolean
 }
 
 /**
- * train이 지금 이 순간, 자기 자신의 지연은 없지만 앞쪽에서 실제로 지연 중인 열차 때문에
+ * train이 지금 이 순간, 자기 자신의 지연은 없지만 앞쪽에서 실제로 지연 중(또는 대피 대기 중)인 열차 때문에
  * (그 사이 열차들이 전부 최소 간격으로 꽉 막혀 있어) 사실상 못 움직이는 상태인지 판정한다.
  *
  * 단순히 "바로 앞차와 MIN_GAP_STATIONS만큼 붙어있는지"만 보면 안 된다 — 혼잡한 노선에서는
  * 아무 문제 없이 정상 운행 중인 열차들도 평소에 최소 간격으로 붙어서 나란히 달리는 게 정상이기
  * 때문이다(그 자체는 지연이 아니라 정상적인 배차 간격 유지). 그래서 앞쪽으로 사슬을 따라가며,
- * 간격이 최소치로 계속 이어지는 동안 실제로 "지연 중(delayRemainingSec>0)"인 열차를 만나는지까지 확인한다 —
- * 만나면 그 지연이 뒤로 전파되어 나도 막힌 것이고, 중간에 여유(간격 벌어짐)가 생기면 사슬이 끊겨 막힌 게 아니다.
+ * 간격이 최소치로 계속 이어지는 동안 실제로 "지연 중" 또는 "대피 대기 중"인 열차를 만나는지까지 확인한다 —
+ * 만나면 그게 뒤로 전파되어 나도 막힌 것이고, 중간에 여유(간격 벌어짐)가 생기면 사슬이 끊겨 막힌 게 아니다.
+ * (단, 내가 급행이고 그 대피 대기 중인 열차가 완행이면 애초에 추월 대상이라 막힌 게 아니다 — engine.ts와 동일 규칙.)
  */
-export function isBlockedByAhead(train: Train, trainsOnTrack: Train[], segmentSec: number[]): boolean {
+export function isBlockedByAhead(train: Train, trainsOnTrack: Train[], track: Track): boolean {
   if (train.delayRemainingSec > 0) return false
-  const sorted = [...trainsOnTrack].sort((a, b) => trainPosition(b, segmentSec) - trainPosition(a, segmentSec))
+  const isExpress = train.trainClass === 'express'
+  const sorted = [...trainsOnTrack].sort(
+    (a, b) => trainPosition(b, effectiveSegmentSec(track, b)) - trainPosition(a, effectiveSegmentSec(track, a)),
+  )
   const idx = sorted.findIndex((t) => t.id === train.id)
   if (idx <= 0) return false
 
-  let cursorPos = trainPosition(train, segmentSec)
+  let cursorPos = trainPosition(train, effectiveSegmentSec(track, train))
   for (let i = idx - 1; i >= 0; i--) {
-    const otherPos = trainPosition(sorted[i], segmentSec)
+    const other = sorted[i]
+    if (isExpress && other.trainClass !== 'express' && (other.yieldRemainingSec ?? 0) > 0) {
+      continue // 대피 중인 완행은 급행 입장에서 애초에 추월 대상이지 막는 열차가 아니다
+    }
+    const otherPos = trainPosition(other, effectiveSegmentSec(track, other))
     if (otherPos - cursorPos > MIN_GAP_STATIONS + EPS) return false // 여유가 있는 열차를 만남 -> 사슬이 끊김, 막힌 게 아님
-    if (sorted[i].delayRemainingSec > 0) return true // 실제로 지연 중인 열차를 만남 -> 그 지연이 사슬을 타고 나에게까지 전파됨
+    if (other.delayRemainingSec > 0 || (other.yieldRemainingSec ?? 0) > 0) return true // 실제로 멈춰있는 열차를 만남 -> 전파됨
     cursorPos = otherPos
   }
-  return false // 사슬 끝까지 아무도 실제로 지연 중이지 않음 -> 정상적으로 최소 간격을 유지하며 흐르는 중일 뿐
+  return false // 사슬 끝까지 아무도 실제로 멈춰있지 않음 -> 정상적으로 최소 간격을 유지하며 흐르는 중일 뿐
 }
 
 export function stationIndexInTrack(track: Track, stationName: string): number {
@@ -61,12 +71,18 @@ export function directionLabelFor(track: Track): string {
 
 /**
  * train이 targetIndex(stops 배열 인덱스, 역)에 도달하기까지 걸리는 시간(게임초).
+ * 급행 열차인데 targetIndex가 그 급행이 정차하지 않는 역이면(애초에 타고 내릴 수 없으므로) null.
  * 이미 지나친 역이고 순환선이 아니면 이 열차로는 갈 수 없으므로 null.
  * 순환선이면 한 바퀴 돌아 다시 도달하는 시간을 계산한다.
  */
 export function trainEtaToStation(train: Train, track: Track, targetIndex: number): number | null {
-  const segCount = track.segmentSec.length
-  const pos = trainPosition(train, track.segmentSec)
+  if (train.trainClass === 'express' && track.expressStopIndices && !track.expressStopIndices.has(targetIndex)) {
+    return null
+  }
+
+  const segmentSec = effectiveSegmentSec(track, train)
+  const segCount = segmentSec.length
+  const pos = trainPosition(train, segmentSec)
 
   let remainingUnits: number
   if (targetIndex >= pos - EPS) {
@@ -80,10 +96,10 @@ export function trainEtaToStation(train: Train, track: Track, targetIndex: numbe
 
   let idx = train.segmentIndex
   let cursorFrac = pos - idx
-  let seconds = train.delayRemainingSec
+  let seconds = train.delayRemainingSec + (train.yieldRemainingSec ?? 0)
 
   while (remainingUnits > EPS) {
-    const segLen = track.segmentSec[idx % segCount]
+    const segLen = segmentSec[idx % segCount]
     const remainInSeg = 1 - cursorFrac
     const take = Math.min(remainingUnits, remainInSeg)
     seconds += take * segLen
@@ -118,7 +134,8 @@ export function getUpcomingTrains(
         color: track.color,
         directionLabel,
         etaSec: eta,
-        blocked: isBlockedByAhead(train, trains, track.segmentSec),
+        blocked: isBlockedByAhead(train, trains, track),
+        isExpress: train.trainClass === 'express',
       })
     }
 
@@ -126,7 +143,7 @@ export function getUpcomingTrains(
     // "곧 새로 투입될 열차"를 별도로 계산한다. 안 그러면 종점에서 반대 방향으로 나갈 방법이 사라진다.
     if (idx === 0 && !track.isLoop && trains.length > 0) {
       const rearmost = trains.reduce((min, t) =>
-        trainPosition(t, track.segmentSec) < trainPosition(min, track.segmentSec) ? t : min,
+        trainPosition(t, effectiveSegmentSec(track, t)) < trainPosition(min, effectiveSegmentSec(track, min)) ? t : min,
       )
       const spawnEta = trainEtaToStation(rearmost, track, MIN_GAP_STATIONS)
       if (spawnEta !== null) {
@@ -139,6 +156,7 @@ export function getUpcomingTrains(
           directionLabel,
           etaSec: spawnEta,
           blocked: false,
+          isExpress: false, // 스폰 전엔 클래스가 정해지지 않았으므로 완행으로 표기(과소평가일 뿐 탑승 자체엔 지장 없음)
         })
       }
     }

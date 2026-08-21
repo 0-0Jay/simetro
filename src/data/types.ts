@@ -17,6 +17,13 @@ export interface LineBranch {
   stops: LineStop[]
 }
 
+export interface ExpressService {
+  /** 급행이 실제로 정차하는 역 이름(본선 기준, 순서 무관 — 시발/종점은 자동으로 포함된 것으로 간주). */
+  stopStationNames: string[]
+  /** 완행이 급행에게 순서를 양보(대피)할 수 있는 역 이름(실제 대피선/추월선이 있는 역). */
+  passingStationNames: string[]
+}
+
 export interface SubwayLine {
   id: string
   name: string
@@ -31,6 +38,8 @@ export interface SubwayLine {
   branches?: LineBranch[]
   /** 순환선인 경우 true (예: 2호선 본선) */
   isLoop?: boolean
+  /** 이 노선에 급행 서비스가 있으면 정차 패턴/대피역 정보 (본선에만 적용). */
+  express?: ExpressService
   /** 데이터 출처/한계에 대한 메모 (근사치 처리한 구간 등) */
   notes?: string
 }

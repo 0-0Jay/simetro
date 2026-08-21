@@ -81,7 +81,7 @@ export function hsvToHex(h: number, s: number, v: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
-function mix(hexA: string, hexB: string, t: number): string {
+export function mix(hexA: string, hexB: string, t: number): string {
   const a = hexToRgb(hexA)
   const b = hexToRgb(hexB)
   const r = Math.round(a.r + (b.r - a.r) * t)

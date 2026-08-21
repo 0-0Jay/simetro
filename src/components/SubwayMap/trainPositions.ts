@@ -1,6 +1,6 @@
 import type { Track } from '../../simulation/tracks'
 import type { Train } from '../../simulation/train'
-import { trainPosition } from '../../simulation/train'
+import { trainPosition, effectiveSegmentSec } from '../../simulation/train'
 import { getStationCoord } from '../../data/coordinates'
 
 export interface RenderedTrain {
@@ -12,6 +12,7 @@ export interface RenderedTrain {
   color: string
   lineId: string
   hasDelay: boolean
+  isExpress: boolean
 }
 
 function dist(a: [number, number], b: [number, number]): number {
@@ -76,7 +77,7 @@ export function computeTrainScreenPositions(
     if (coords.some((c) => !c)) continue // 아직 좌표 배치가 안 된 노선은 지도에 표시하지 않음
 
     for (const train of trains) {
-      const pos = trainPosition(train, track.segmentSec)
+      const pos = trainPosition(train, effectiveSegmentSec(track, train))
       const idx = Math.min(Math.floor(pos), coords.length - 2)
       const frac = Math.max(0, Math.min(1, pos - idx))
       const bends = track.segmentBends[idx] ?? []
@@ -90,6 +91,7 @@ export function computeTrainScreenPositions(
         color: track.color,
         lineId: track.lineId,
         hasDelay: !!train.activeDelay,
+        isExpress: train.trainClass === 'express',
       })
     }
   }
