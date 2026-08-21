@@ -1,14 +1,9 @@
-import { useDelayNewsStore, type DelayNewsEntry } from '../store/delayNewsStore'
+import { useDelayNewsStore, formatNewsLine } from '../store/delayNewsStore'
 import { formatGameClock12h } from '../store/simulationStore'
-import { formatDelayMinutes } from '../utils/time'
 import { LINE_BADGE_LABEL } from '../data/lineBadges'
 
 interface DelayNewsModalProps {
   onClose: () => void
-}
-
-function newsLine(entry: DelayNewsEntry): string {
-  return `${entry.stationName}에 ${entry.reason} 발생. 열차운행 ${formatDelayMinutes(entry.durationSec)} 지연`
 }
 
 export function DelayNewsModal({ onClose }: DelayNewsModalProps) {
@@ -28,7 +23,11 @@ export function DelayNewsModal({ onClose }: DelayNewsModalProps) {
           )}
           <div className="flex flex-col gap-2">
             {history.map((entry) => (
-              <div key={entry.id} className="rounded-lg border border-[var(--border)] p-2.5">
+              <div
+                key={entry.id}
+                className="rounded-lg border p-2.5"
+                style={{ borderColor: entry.kind === 'withdrawal' ? '#ff3b30' : 'var(--border)' }}
+              >
                 <div className="mb-1 flex items-center gap-1.5">
                   <span
                     className="flex h-4 w-4 shrink-0 items-center justify-center whitespace-pre-line rounded-full text-center text-[6px] font-bold leading-none text-white"
@@ -37,11 +36,16 @@ export function DelayNewsModal({ onClose }: DelayNewsModalProps) {
                     {LINE_BADGE_LABEL[entry.lineId] ?? ''}
                   </span>
                   <span className="text-[11px] text-[var(--text-secondary)]">{entry.lineName}</span>
+                  {entry.kind === 'withdrawal' && (
+                    <span className="text-[11px] font-bold" style={{ color: '#ff3b30' }}>
+                      운행중단
+                    </span>
+                  )}
                   <span className="ml-auto font-digital text-[11px] text-[var(--text-secondary)]">
                     {formatGameClock12h(entry.gameSeconds)}
                   </span>
                 </div>
-                <p className="text-sm text-[var(--text-primary)]">{newsLine(entry)}</p>
+                <p className="text-sm text-[var(--text-primary)]">{formatNewsLine(entry)}</p>
               </div>
             ))}
           </div>

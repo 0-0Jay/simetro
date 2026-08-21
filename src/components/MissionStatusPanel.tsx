@@ -109,6 +109,7 @@ export function MissionStatusPanel() {
         <WaitingPanel
           station={player.station}
           armedBoard={player.armedBoard}
+          forcedOffReason={player.forcedOffReason}
           tracks={tracks}
           trainsByTrack={trainsByTrack}
           gameSeconds={gameSeconds}
@@ -180,6 +181,7 @@ function RouteStrip({ waypoints, nextWaypointIdx, tracks }: { waypoints: string[
 function WaitingPanel({
   station,
   armedBoard,
+  forcedOffReason,
   tracks,
   trainsByTrack,
   gameSeconds,
@@ -188,6 +190,7 @@ function WaitingPanel({
 }: {
   station: string
   armedBoard?: ArmedBoard
+  forcedOffReason?: string
   tracks: Track[]
   trainsByTrack: Record<string, Train[]>
   gameSeconds: number
@@ -207,6 +210,12 @@ function WaitingPanel({
 
   return (
     <div className="flex flex-1 flex-col gap-1.5 overflow-y-auto">
+      {forcedOffReason && (
+        // "으로" 하드코딩: 강제 하차를 유발하는 사유는 현재 delayEvents.ts의 "열차 고장"(받침 있음) 뿐이라 항상 맞는다.
+        <p className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: '#ff3b30', color: '#ff3b30' }}>
+          🚨 {forcedOffReason}으로 열차 운행이 중단되어 {station}에서 하차 조치되었습니다.
+        </p>
+      )}
       <p className="text-xs text-[var(--text-secondary)]">다음 열차 탑승 — 목록에서 선택하세요</p>
       {upcoming.length === 0 && isOvernight && (
         <p className="text-sm" style={{ color: '#ff9500' }}>

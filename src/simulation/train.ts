@@ -9,7 +9,13 @@ export interface Train {
   segmentElapsedSec: number
   /** 지연으로 인해 더 대기해야 하는 남은 시간(초). 0이면 지연 없음 */
   delayRemainingSec: number
-  activeDelay?: { category: DelayCategory; label: string }
+  activeDelay?: {
+    category: DelayCategory
+    label: string
+    reason: string
+    /** true면 이 지연이 끝나는 시점에 정상 재개하지 못하고 열차가 고장 판정을 받아 노선에서 제거된다. */
+    willBreakdown: boolean
+  }
 }
 
 /** 연속적인 위치(정거장 단위). 정수면 역에 정확히 있는 상태, 소수면 구간 이동 중. */

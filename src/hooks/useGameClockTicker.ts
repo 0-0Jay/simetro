@@ -15,8 +15,8 @@ export function useGameClockTicker() {
       const deltaSeconds = (now - lastTime) / 1000
       lastTime = now
       advance(deltaSeconds)
-      const { gameSeconds, tracks, trainsByTrack } = useSimulationStore.getState()
-      missionTick(deltaSeconds * TIME_COMPRESSION_RATE, gameSeconds, tracks, trainsByTrack)
+      const { gameSeconds, tracks, trainsByTrack, lastWithdrawals } = useSimulationStore.getState()
+      missionTick(deltaSeconds * TIME_COMPRESSION_RATE, gameSeconds, tracks, trainsByTrack, lastWithdrawals)
       rafId = requestAnimationFrame(tick)
     }
 

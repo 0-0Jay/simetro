@@ -5,6 +5,7 @@ import { stationIndexInTrack, stationsCrossedThisTick } from '../simulation/miss
 import { trainPosition } from '../simulation/train'
 import type { Track } from '../simulation/tracks'
 import type { Train } from '../simulation/train'
+import type { TrainWithdrawal } from './simulationStore'
 
 export type ArmedBoard =
   | { trackId: string; trainId: string }
@@ -12,7 +13,13 @@ export type ArmedBoard =
   | { trackId: string; trainId: null; knownTrainIds: string[] }
 
 export type PlayerState =
-  | { mode: 'waiting'; station: string; armedBoard?: ArmedBoard }
+  | {
+      mode: 'waiting'
+      station: string
+      armedBoard?: ArmedBoard
+      /** 직전에 탑승 중이던 열차가 고장으로 노선에서 제거되어 강제 하차당한 경우, 그 사유(예: "열차 고장"). 다음 탑승 시 자연히 사라짐. */
+      forcedOffReason?: string
+    }
   | { mode: 'riding'; trackId: string; trainId: string; alightArmed: boolean; lastSegmentIndex: number }
 
 export interface ActiveMission {
@@ -49,7 +56,13 @@ interface MissionState {
   cancelActiveMission: () => void
   finishAndReturn: () => void
   retryMission: (record: MissionRecord, gameSeconds: number) => void
-  tick: (deltaSec: number, gameSeconds: number, tracks: Track[], trainsByTrack: Record<string, Train[]>) => void
+  tick: (
+    deltaSec: number,
+    gameSeconds: number,
+    tracks: Track[],
+    trainsByTrack: Record<string, Train[]>,
+    withdrawals: TrainWithdrawal[],
+  ) => void
   resetAll: () => void
 }
 
@@ -146,7 +159,7 @@ export const useMissionStore = create<MissionState>()(
         set({ activeMission: beginMission(mission, gameSeconds) })
       },
 
-      tick: (_deltaSec, gameSeconds, tracks, trainsByTrack) => {
+      tick: (_deltaSec, gameSeconds, tracks, trainsByTrack, withdrawals) => {
         const active = get().activeMission
         if (!active || active.completedAtGameSeconds !== null) return
 
@@ -199,11 +212,16 @@ export const useMissionStore = create<MissionState>()(
           if (!track) {
             // 이론상 발생하지 않음(트랙 목록은 고정)
           } else if (!train) {
-            // 탑승 중이던 열차가 종점 도착으로 소멸 -> 종점에서 강제 하차 (경유는 "그 역에서 실제로 내렸을 때"만 인정)
-            const terminusName = track.stops[track.stops.length - 1].name
-            if (terminusName === mission.waypoints[nextWaypointIdx]) nextWaypointIdx++
-            nextPlayer = { mode: 'waiting', station: terminusName }
-            if (terminusName === mission.waypoints[mission.waypoints.length - 1] && nextWaypointIdx >= mission.waypoints.length) {
+            // 탑승 중이던 열차가 소멸함 -> 두 가지 경우를 구분해야 한다.
+            const withdrawal = withdrawals.find((w) => w.trackId === player.trackId && w.trainId === player.trainId)
+            const stationName = withdrawal
+              ? // 고장으로 도중에 제거됨 -> 지연 dwell 중이던(=한 번도 움직이지 않은) 바로 그 역에서 강제 하차
+                withdrawal.stationName
+              : // 정상적으로 종점 도착 후 소멸
+                track.stops[track.stops.length - 1].name
+            if (stationName === mission.waypoints[nextWaypointIdx]) nextWaypointIdx++
+            nextPlayer = { mode: 'waiting', station: stationName, forcedOffReason: withdrawal?.reason }
+            if (stationName === mission.waypoints[mission.waypoints.length - 1] && nextWaypointIdx >= mission.waypoints.length) {
               completedNow = true
             }
           } else {

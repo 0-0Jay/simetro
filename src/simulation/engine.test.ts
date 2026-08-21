@@ -34,6 +34,12 @@ function noRng() {
   return 0.999999
 }
 
+/** 주어진 값을 순서대로 반환하다가 소진되면 0.999999(=거의 항상 확률 미달)를 반환하는 rng. rollDelay 판정을 결정론적으로 조작할 때 쓴다. */
+function scriptedRng(sequence: number[]): () => number {
+  let i = 0
+  return () => (i < sequence.length ? sequence[i++] : 0.999999)
+}
+
 describe('initializeTrainsForTrack', () => {
   it('MIN_GAP_STATIONS 간격으로 phase부터 끝까지 채운다', () => {
     const track = makeTrack()
@@ -99,6 +105,51 @@ describe('tickTrack — 종점 소멸/재투입', () => {
     expect(trains.some((t) => t.id === 'solo')).toBe(false)
     expect(trains).toHaveLength(1)
     expect(trains[0].segmentIndex).toBe(0)
+  })
+})
+
+describe('tickTrack — 지연 해결/미해결', () => {
+  it('willBreakdown이 없는 지연은 만료되면 정상적으로 재개된다(열차가 사라지지 않음)', () => {
+    const track = makeTrack({
+      stops: [{ name: 'A', cumulativeKm: 0 }, { name: 'B', cumulativeKm: 1 }, { name: 'C', cumulativeKm: 2 }],
+      segmentSec: [60, 60],
+    })
+    let trains: Train[] = [{ id: 'solo', trackId: track.id, segmentIndex: 0, segmentElapsedSec: 55, delayRemainingSec: 0 }]
+    const seqRef = { current: 0 }
+    // DELAY_DEFS 순서(signal, congestion, psd, ...) 중 psd(스크린도어 오류, breakdownChance:0)만 당첨시킨다.
+    const rng = scriptedRng([0.9, 0.9, 0.0001, 0.5, 0.5])
+    trains = tickTrack(track, trains, 10, 1000, rng, 'train', seqRef)
+    expect(trains[0].activeDelay?.willBreakdown).toBe(false)
+    const delaySec = trains[0].delayRemainingSec
+    expect(delaySec).toBeGreaterThan(0)
+
+    trains = tickTrack(track, trains, delaySec + 5, 1010, noRng, 'train', seqRef)
+    expect(trains.some((t) => t.id === 'solo')).toBe(true)
+    expect(trains.find((t) => t.id === 'solo')?.activeDelay).toBeUndefined()
+  })
+
+  it('willBreakdown 판정을 받은 지연이 만료되면 열차가 노선에서 제거되고 onWithdraw가 호출된다', () => {
+    const track = makeTrack({
+      stops: [{ name: 'A', cumulativeKm: 0 }, { name: 'B', cumulativeKm: 1 }, { name: 'C', cumulativeKm: 2 }],
+      segmentSec: [60, 60],
+    })
+    let trains: Train[] = [{ id: 'solo', trackId: track.id, segmentIndex: 0, segmentElapsedSec: 55, delayRemainingSec: 0 }]
+    const seqRef = { current: 0 }
+    const withdrawEvents: { trainId: string; stationName: string; label: string; reason: string }[] = []
+    // signal/congestion/psd/trackCheck/vehicleCheck 5개를 모두 탈락시키고 breakdown(열차 고장)만 당첨시킨 뒤,
+    // duration 절반, reason 첫 번째(유일한 값), willBreakdown도 당첨시킨다.
+    const rng = scriptedRng([0.9, 0.9, 0.9, 0.9, 0.9, 0.0001, 0.5, 0.5, 0.01])
+
+    trains = tickTrack(track, trains, 10, 1000, rng, 'train', seqRef, undefined, (e) => withdrawEvents.push(e))
+    expect(trains[0].activeDelay?.willBreakdown).toBe(true)
+    const delaySec = trains[0].delayRemainingSec
+    expect(delaySec).toBeGreaterThan(0)
+    expect(withdrawEvents).toHaveLength(0)
+
+    trains = tickTrack(track, trains, delaySec + 5, 1010, noRng, 'train', seqRef, undefined, (e) => withdrawEvents.push(e))
+    expect(trains.some((t) => t.id === 'solo')).toBe(false)
+    expect(withdrawEvents).toHaveLength(1)
+    expect(withdrawEvents[0]).toMatchObject({ trainId: 'solo', stationName: 'B', reason: '열차 고장' })
   })
 })
 

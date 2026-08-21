@@ -11,6 +11,14 @@ export interface DelayRollEvent {
   durationSec: number
 }
 
+/** 지연이 "결국 해결되지 못해" 열차가 노선에서 제거될 때 호출되는 콜백 정보. */
+export interface WithdrawEvent {
+  trainId: string
+  stationName: string
+  label: string
+  reason: string
+}
+
 /** 열차 사이에 반드시 1개 역이 있어야 하므로, station-index 기준 최소 간격은 2 (역[열차]--역--역[열차]) */
 export const MIN_GAP_STATIONS = 2
 const EPS = 1e-6
@@ -53,6 +61,7 @@ export function tickTrack(
   spawnIdPrefix: string,
   spawnSeqRef: { current: number },
   onDelay?: (event: DelayRollEvent) => void,
+  onWithdraw?: (event: WithdrawEvent) => void,
 ): Train[] {
   if (track.segmentSec.length === 0) return trains
 
@@ -76,7 +85,19 @@ export function tickTrack(
         remaining -= consumed
         if (train.delayRemainingSec <= EPS) {
           train.delayRemainingSec = 0
+          const resolvedDelay = train.activeDelay
           train.activeDelay = undefined
+          if (resolvedDelay?.willBreakdown) {
+            // 지연이 끝나는 시점에 결국 수리/해결에 실패 -> 지금 있는 역에서 승객을 전원 하차시키고 열차를 제거한다.
+            onWithdraw?.({
+              trainId: train.id,
+              stationName: track.stops[train.segmentIndex].name,
+              label: resolvedDelay.label,
+              reason: resolvedDelay.reason,
+            })
+            arrivedTerminus = true
+            break
+          }
         }
         continue
       }
@@ -121,7 +142,12 @@ export function tickTrack(
         const rolled = rollDelay(gameSeconds, rng)
         if (rolled) {
           train.delayRemainingSec = rolled.durationSec
-          train.activeDelay = { category: rolled.category, label: rolled.label }
+          train.activeDelay = {
+            category: rolled.category,
+            label: rolled.label,
+            reason: rolled.reason,
+            willBreakdown: rolled.willBreakdown,
+          }
           onDelay?.({
             stationName: track.stops[train.segmentIndex].name,
             category: rolled.category,

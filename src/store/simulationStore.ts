@@ -22,10 +22,20 @@ const MAX_GAME_DELTA_SEC = 300
 
 const TRACKS: Track[] = buildTracks()
 
+/** 지연이 결국 해결되지 못해 열차가 노선에서 제거된 사건. 발생한 그 advance() 틱에서만 유효(다음 틱엔 비워짐) —
+ *  missionStore가 "내가 타고 있던 열차가 방금 고장으로 제거됐는지"를 판별하는 데 쓴다. */
+export interface TrainWithdrawal {
+  trackId: string
+  trainId: string
+  stationName: string
+  reason: string
+}
+
 export interface SimulationState {
   gameSeconds: number
   tracks: Track[]
   trainsByTrack: Record<string, Train[]>
+  lastWithdrawals: TrainWithdrawal[]
   advance: (realDeltaSeconds: number) => void
 }
 
@@ -47,6 +57,7 @@ export const useSimulationStore = create<SimulationState>()((set, get) => {
     gameSeconds: SERVICE_START_SECONDS,
     tracks: TRACKS,
     trainsByTrack: initializeAllTrains(rng),
+    lastWithdrawals: [],
     advance: (realDeltaSeconds) => {
       const gameDeltaSec = Math.min(realDeltaSeconds * TIME_COMPRESSION_RATE, MAX_GAME_DELTA_SEC)
       const { gameSeconds, trainsByTrack } = get()
@@ -58,10 +69,11 @@ export const useSimulationStore = create<SimulationState>()((set, get) => {
 
       if (advanced >= span) {
         // 하루 운행이 끝나고 다음날 첫차 시간대로 넘어가는 순간: 막차 시간대에 비워졌던 노선을 전부 다시 채운다.
-        set({ gameSeconds: newGameSeconds, trainsByTrack: initializeAllTrains(rng) })
+        set({ gameSeconds: newGameSeconds, trainsByTrack: initializeAllTrains(rng), lastWithdrawals: [] })
         return
       }
 
+      const withdrawalsThisTick: TrainWithdrawal[] = []
       const newTrainsByTrack: Record<string, Train[]> = {}
       for (const track of TRACKS) {
         const seqRef = spawnSeqByTrack.get(track.id)!
@@ -77,6 +89,7 @@ export const useSimulationStore = create<SimulationState>()((set, get) => {
             // "뉴스"로는 사고/고장류(incident)만 다룬다 — 신호 대기/혼잡은 너무 잦아 티커에 노출하면 스팸이 된다.
             if (event.category !== 'incident') return
             useDelayNewsStore.getState().addEntry({
+              kind: 'delay',
               stationName: event.stationName,
               lineId: track.lineId,
               lineName: track.lineName,
@@ -86,10 +99,28 @@ export const useSimulationStore = create<SimulationState>()((set, get) => {
               gameSeconds: newGameSeconds,
             })
           },
+          (event) => {
+            withdrawalsThisTick.push({
+              trackId: track.id,
+              trainId: event.trainId,
+              stationName: event.stationName,
+              reason: event.reason,
+            })
+            useDelayNewsStore.getState().addEntry({
+              kind: 'withdrawal',
+              stationName: event.stationName,
+              lineId: track.lineId,
+              lineName: track.lineName,
+              color: track.color,
+              reason: event.reason,
+              durationSec: 0,
+              gameSeconds: newGameSeconds,
+            })
+          },
         )
       }
 
-      set({ gameSeconds: newGameSeconds, trainsByTrack: newTrainsByTrack })
+      set({ gameSeconds: newGameSeconds, trainsByTrack: newTrainsByTrack, lastWithdrawals: withdrawalsThisTick })
     },
   }
 })
