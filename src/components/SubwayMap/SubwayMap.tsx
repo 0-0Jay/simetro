@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState } from 'react'
+import { memo, useMemo, useRef, useState } from 'react'
 import { useSimulationStore } from '../../store/simulationStore'
-import { buildMapData } from './mapData'
+import { buildMapData, type MapLineSegment, type MapStation } from './mapData'
 import { computeTrainScreenPositions } from './trainPositions'
 import { usePanZoom } from './usePanZoom'
 import { StationPopover } from './StationPopover'
@@ -21,6 +21,106 @@ const WAYPOINT_STATUS_COLOR: Record<'done' | 'next' | 'pending', string> = {
   next: '#ff9500',
   pending: '#8b949e',
 }
+
+/**
+ * 노선/역(1000개가 넘는 SVG 엘리먼트)은 한 번 계산되면 그 안의 값이 절대 바뀌지 않는데,
+ * 부모 SubwayMap은 열차 위치 때문에 매 프레임(요청되는 애니메이션 프레임마다) 리렌더링된다.
+ * 이 정적 레이어를 분리해서 memo로 감싸두면, segments/stations/onStationClick 참조가 그대로인 한
+ * (실제로 컴포넌트 생애주기 내내 안 바뀜) 매 프레임 이 부분은 리렌더링을 건너뛰어, 매초 수만 개씩
+ * 새로 만들어지던 React 엘리먼트를 없애 발열/배터리 소모를 크게 줄인다.
+ */
+const StaticMapLayer = memo(function StaticMapLayer({
+  segments,
+  stations,
+  onStationClick,
+}: {
+  segments: MapLineSegment[]
+  stations: MapStation[]
+  onStationClick: (name: string) => void
+}) {
+  return (
+    <>
+      {/* 노선 (그림자 언더레이 + 실제 색 라인) */}
+      {segments.map((seg) => (
+        <polyline
+          key={`${seg.key}-under`}
+          points={seg.points.map((p) => p.join(',')).join(' ')}
+          fill="none"
+          stroke="#000000"
+          strokeOpacity={0.35}
+          strokeWidth={7}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ))}
+      {segments.map((seg) => (
+        <polyline
+          key={seg.key}
+          points={seg.points.map((p) => p.join(',')).join(' ')}
+          fill="none"
+          stroke={seg.color}
+          strokeWidth={5}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      ))}
+
+      {/* 일반역: 작은 흰 테두리 원 + 역명 라벨 */}
+      {stations
+        .filter((st) => !st.isTransfer)
+        .map((st) => (
+          <g key={st.name} onClick={(e) => { e.stopPropagation(); onStationClick(st.name) }} style={{ cursor: 'pointer' }}>
+            <circle cx={st.x} cy={st.y} r={7} fill="transparent" />
+            <circle
+              cx={st.x}
+              cy={st.y}
+              r={3.2}
+              fill={LINE_COLOR_BY_ID.get(st.lineIds[0]) ?? '#ffffff'}
+              stroke="#0d1117"
+              strokeWidth={1}
+            />
+            <text
+              x={st.x}
+              y={st.y - 7}
+              textAnchor="middle"
+              fontSize={8.5}
+              fontWeight={400}
+              fill="#d7dde3"
+              stroke="#0d1117"
+              strokeWidth={2.2}
+              paintOrder="stroke"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              {st.name}
+            </text>
+          </g>
+        ))}
+
+      {/* 환승역: 크게 강조 + 굵은 역명 라벨 */}
+      {stations
+        .filter((st) => st.isTransfer)
+        .map((st) => (
+          <g key={st.name} onClick={(e) => { e.stopPropagation(); onStationClick(st.name) }} style={{ cursor: 'pointer' }}>
+            <circle cx={st.x} cy={st.y} r={7} fill="#0d1117" stroke="#ffffff" strokeWidth={2.6} />
+            <text
+              x={st.x}
+              y={st.y - 11}
+              textAnchor="middle"
+              fontSize={12}
+              fontWeight={700}
+              fill="#ffffff"
+              stroke="#0d1117"
+              strokeWidth={3}
+              paintOrder="stroke"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              {st.name}
+            </text>
+          </g>
+        ))}
+    </>
+  )
+})
 
 export interface SubwayMapRider {
   mode: 'waiting' | 'riding'
@@ -107,84 +207,7 @@ export function SubwayMap({ rider, waypointMarkers }: SubwayMapProps) {
         {...handlers}
       >
       <g transform={`translate(${transform.tx} ${transform.ty}) scale(${transform.scale})`}>
-        {/* 노선 (그림자 언더레이 + 실제 색 라인) */}
-        {segments.map((seg) => (
-          <polyline
-            key={`${seg.key}-under`}
-            points={seg.points.map((p) => p.join(',')).join(' ')}
-            fill="none"
-            stroke="#000000"
-            strokeOpacity={0.35}
-            strokeWidth={7}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ))}
-        {segments.map((seg) => (
-          <polyline
-            key={seg.key}
-            points={seg.points.map((p) => p.join(',')).join(' ')}
-            fill="none"
-            stroke={seg.color}
-            strokeWidth={5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        ))}
-
-        {/* 일반역: 작은 흰 테두리 원 + 역명 라벨 */}
-        {stations
-          .filter((st) => !st.isTransfer)
-          .map((st) => (
-            <g key={st.name} onClick={(e) => { e.stopPropagation(); setSelectedStation(st.name) }} style={{ cursor: 'pointer' }}>
-              <circle cx={st.x} cy={st.y} r={7} fill="transparent" />
-              <circle
-                cx={st.x}
-                cy={st.y}
-                r={3.2}
-                fill={LINE_COLOR_BY_ID.get(st.lineIds[0]) ?? '#ffffff'}
-                stroke="#0d1117"
-                strokeWidth={1}
-              />
-              <text
-                x={st.x}
-                y={st.y - 7}
-                textAnchor="middle"
-                fontSize={8.5}
-                fontWeight={400}
-                fill="#d7dde3"
-                stroke="#0d1117"
-                strokeWidth={2.2}
-                paintOrder="stroke"
-                style={{ fontFamily: 'system-ui, sans-serif' }}
-              >
-                {st.name}
-              </text>
-            </g>
-          ))}
-
-        {/* 환승역: 크게 강조 + 굵은 역명 라벨 */}
-        {stations
-          .filter((st) => st.isTransfer)
-          .map((st) => (
-            <g key={st.name} onClick={(e) => { e.stopPropagation(); setSelectedStation(st.name) }} style={{ cursor: 'pointer' }}>
-              <circle cx={st.x} cy={st.y} r={7} fill="#0d1117" stroke="#ffffff" strokeWidth={2.6} />
-              <text
-                x={st.x}
-                y={st.y - 11}
-                textAnchor="middle"
-                fontSize={12}
-                fontWeight={700}
-                fill="#ffffff"
-                stroke="#0d1117"
-                strokeWidth={3}
-                paintOrder="stroke"
-                style={{ fontFamily: 'system-ui, sans-serif' }}
-              >
-                {st.name}
-              </text>
-            </g>
-          ))}
+        <StaticMapLayer segments={segments} stations={stations} onStationClick={setSelectedStation} />
 
         {/* 미션 경유지 강조 링 — 다음 목표는 크게 부풀며 깜빡이고, 나머지는 은은하게 깜빡인다 */}
         {waypointMarkers?.map((wp, i) => {
